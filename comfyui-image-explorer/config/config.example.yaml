@@ -1,50 +1,28 @@
-# ComfyUI画像生成ツール設定ファイル（サンプル）
-# このファイルをコピーして config.yaml として使用してください
-# cp config.yaml.example config.yaml
+# ComfyUI画像生成ツール設定ファイル
 
-# ====== 実行設定 ======
+# 実行設定
 execution:
-  # 各パターンの繰り返し回数（異なるシードで生成）
   repeats: 2
-  
-  # 非探索軸をランダム化するか
-  # true: 非探索軸はランダムに選択（バリエーション豊富）
-  # false: 非探索軸は最初の1個を固定（一貫性重視）
   randomize_non_target: true
-  
-  # ComfyUIのURL
   comfy_url: "http://127.0.0.1:8188"
-  
-  # 使用済み軸を記録するファイル
   state_file: "axis_state.json"
-  
-  # 完了チェックのポーリング間隔（秒）
   poll_interval: 1.0
 
-# ====== ワークフロー設定 ======
+# ワークフロー設定
 workflow:
-  # ComfyUIワークフローJSONファイルのパス
-  # ComfyUIで「Save (API Format)」で保存したファイルを指定
-  json_path: "illust_image.json"
-  
-  # 画像の出力先ルートディレクトリ
-  # 環境に応じて変更してください
+  json_path: "../workflow/illust_image.json"
   output_root: "C:/ComfyUI/ComfyUI_windows_portable_nvidia/ComfyUI_windows_portable/ComfyUI/output"
-  
-  # ワークフローのノードIDマッピング
-  # ComfyUIのワークフローで各ノードのIDを確認して設定
   node_mapping:
-    positive_prompt: "2"        # ポジティブプロンプトノードID
-    negative_prompt: "3"        # ネガティブプロンプトノードID
-    ksampler: "4"              # KSamplerノードID
-    empty_latent: "5"          # Empty LatentノードID
-    save_image: "7"            # Save ImageノードID
-    lora: "18"                 # 標準LoRAノードID
-    perky_breasts_lora: "19"   # Perky Breasts LoRAノードID
+    positive_prompt: "2"
+    negative_prompt: "3"
+    ksampler: "4"
+    empty_latent: "5"
+    save_image: "7"
+    lora: "19"
 
-# ====== プロンプトテンプレート ======
+# プロンプトテンプレート
 prompt_template:
-  # 固定ポジティブプロンプト（常に含まれる）
+  # 固定ポジティブプロンプト
   fixed_positive:
     - "1girl"
     - "anime style"
@@ -53,21 +31,19 @@ prompt_template:
     - "soft lighting"
     - "simple background"
   
-  # 可変軸（探索するパラメータ）
+  # 可変軸
   axes:
-    # 重み付き選択肢の例
     - name: "breasts"
       choices:
         - {text: "breasts out", weight: 1.0}
-        - {text: "one breast out", weight: 1.0}
+        - {text: "one breast out", weight: 0.7}
         - {text: "nipple slip", weight: 0.5}
         - {text: "sideboob", weight: 0.5}
         - {text: "underboob", weight: 0.5}
         - {text: "areola slip", weight: 0.3}
         - {text: "breasts slip", weight: 0.7}
-        - {text: "", weight: 0.2}  # 空文字列（何も追加しない）
+        - {text: "", weight: 0.2}
     
-    # 等確率選択肢の例
     - name: "hair_style"
       choices:
         - "long hair"
@@ -183,7 +159,7 @@ prompt_template:
         - {text: "bracelet", weight: 1.0}
         - {text: "ring", weight: 1.0}
   
-  # ネガティブプロンプト（常に含まれる）
+  # ネガティブプロンプト
   negative:
     - "bad anatomy"
     - "bad face"
@@ -195,37 +171,15 @@ prompt_template:
     - "realistic"
     - "photo"
 
-# ====== サンプラーの選択肢 ======
+# サンプラーの選択肢
 sampler_choices:
-  # サンプリングステップ数
   steps: [20, 25]
-  
-  # CFGスケール
   cfg: [6.0, 7.0]
-  
-  # サンプラー名
   sampler_name: ["euler", "dpmpp_2m"]
-  
-  # スケジューラー名
   scheduler: ["karras", "normal"]
 
-# ====== LoRAの選択肢 ======
+# LoRAの選択肢
 lora_choices:
-  # 標準LoRA
-  standard:
-    # LoRAファイル名のリスト（ComfyUIのLoRAフォルダに配置）
-    names: ["OneBreastOutLoRA_V1_1rank8.safetensors"]
-    
-    # モデル強度
-    model_strength: [0.0]
-    
-    # CLIPエンコーダ強度
-    clip_strength: [0.0]
-  
-  # Perky Breasts LoRA
-  perky_breasts:
-    # モデル強度
-    model_strength: [0.4, 0.8]
-    
-    # CLIPエンコーダ強度
-    clip_strength: [0.8, 1.2]
+  names: ["perky_breasts1.safetensors", "frilled_bikini.safetensors"]
+  model_strength: [0.4, 0.8]
+  clip_strength: [0.8, 1.2]
