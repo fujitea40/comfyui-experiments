@@ -1,0 +1,22 @@
+# ComfyUI画像生成ツール - 必要なPythonパッケージ
+
+# HTTP通信（ComfyUI API）
+requests>=2.31.0
+
+# YAML設定ファイル解析
+pyyaml>=6.0.0
+
+# 以下は標準ライブラリのため不要
+# - json (標準ライブラリ)
+# - pathlib (標準ライブラリ)
+# - dataclasses (Python 3.7+)
+# - typing (Python 3.5+)
+# - itertools (標準ライブラリ)
+# - logging (標準ライブラリ)
+# - time (標準ライブラリ)
+# - random (標準ライブラリ)
+# - uuid (標準ライブラリ)
+# - math (標準ライブラリ)
+# - copy (標準ライブラリ)
+# - argparse (標準ライブラリ)
+# - sys (標準ライブラリ)

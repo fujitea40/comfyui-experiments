@@ -1,0 +1,191 @@
+# ComfyUI画像生成ツール設定ファイル
+
+# 実行設定
+execution:
+  repeats: 2
+  randomize_non_target: true
+  comfy_url: "http://127.0.0.1:8188"
+  state_file: "axis_state.json"
+  poll_interval: 1.0
+
+# ワークフロー設定
+workflow:
+  json_path: "workflow/illust_image.json"
+  output_root: "C:/ComfyUI/ComfyUI_windows_portable_nvidia/ComfyUI_windows_portable/ComfyUI/output"
+  node_mapping:
+    positive_prompt: "2"
+    negative_prompt: "3"
+    ksampler: "4"
+    empty_latent: "5"
+    save_image: "7"
+    lora: "18"
+    perky_breasts_lora: "19"
+
+# プロンプトテンプレート
+prompt_template:
+  # 固定ポジティブプロンプト
+  fixed_positive:
+    - "1girl"
+    - "anime style"
+    - "cute face"
+    - "big eyes"
+    - "soft lighting"
+    - "simple background"
+  
+  # 可変軸
+  axes:
+    - name: "breasts"
+      choices:
+        - {text: "breasts out", weight: 1.0}
+        - {text: "one breast out", weight: 1.0}
+        - {text: "nipple slip", weight: 0.5}
+        - {text: "sideboob", weight: 0.5}
+        - {text: "underboob", weight: 0.5}
+        - {text: "areola slip", weight: 0.3}
+        - {text: "breasts slip", weight: 0.7}
+        - {text: "", weight: 0.2}
+    
+    - name: "hair_style"
+      choices:
+        - "long hair"
+        - "short hair"
+        - "bob cut"
+        - "twin tails"
+        - "ponytail"
+        - "side ponytail"
+        - "wavy hair"
+        - "straight hair"
+        - "messy hair"
+        - "ahoge"
+    
+    - name: "hair_color"
+      choices:
+        - "black hair"
+        - "brown hair"
+        - "blonde hair"
+        - "blue hair"
+        - "pink hair"
+        - "silver hair"
+        - "white hair"
+        - "red hair"
+        - "purple hair"
+        - "green hair"
+    
+    - name: "expression"
+      choices:
+        - "smile"
+        - "gentle smile"
+        - "closed eyes smile"
+        - "shy smile"
+        - "neutral expression"
+        - "serious expression"
+        - "surprised"
+        - "embarrassed"
+        - "angry"
+        - "sad expression"
+    
+    - name: "gaze"
+      choices:
+        - "looking at viewer"
+        - "looking away"
+        - "looking down"
+        - "looking up"
+        - "head tilt"
+        - "face close-up"
+    
+    - name: "pose"
+      choices:
+        - "standing"
+        - "sitting"
+        - "leaning forward"
+        - "leaning back"
+        - "arms behind back"
+        - "hands on hips"
+        - "crossed arms"
+    
+    - name: "outfit"
+      choices:
+        - "nude"
+        - "bikini"
+        - "frilled bikini"
+        - "micro bikini"
+        - "casual outfit"
+        - "yukata"
+        - "lingerie"
+        - "negligee"
+    
+    - name: "state"
+      choices:
+        - {text: "wet clothes", weight: 0.2}
+        - {text: "oversized clothes", weight: 0.7}
+        - {text: "", weight: 3.0}
+    
+    - name: "angle"
+      choices:
+        - {text: "front view", weight: 2.0}
+        - {text: "side view", weight: 0.3}
+        - {text: "back view", weight: 0.0}
+        - {text: "three-quarter view", weight: 3.0}
+        - {text: "from above", weight: 0.0}
+        - {text: "from below", weight: 0.0}
+        - {text: "low angle", weight: 0.7}
+        - {text: "high angle", weight: 0.7}
+        - {text: "overhead view", weight: 0.0}
+        - {text: "close-up", weight: 1.5}
+        - {text: "upper body", weight: 2.5}
+        - {text: "portrait", weight: 3.0}
+        - {text: "full body", weight: 1.5}
+        - {text: "cowboy shot", weight: 0.7}
+        - {text: "extreme close-up", weight: 0.2}
+    
+    - name: "accessory"
+      choices:
+        - {text: "", weight: 3.0}
+        - {text: "glasses", weight: 1.0}
+        - {text: "round glasses", weight: 0.2}
+        - {text: "rimless glasses", weight: 0.2}
+        - {text: "sunglasses", weight: 0.1}
+        - {text: "earrings", weight: 0.8}
+        - {text: "hoop earrings", weight: 0.4}
+        - {text: "stud earrings", weight: 0.7}
+        - {text: "necklace", weight: 1.0}
+        - {text: "choker", weight: 2.0}
+        - {text: "hair ribbon", weight: 1.0}
+        - {text: "hair clip", weight: 1.0}
+        - {text: "hairband", weight: 1.0}
+        - {text: "bow", weight: 1.0}
+        - {text: "flower hair ornament", weight: 0.7}
+        - {text: "earphones", weight: 0.3}
+        - {text: "headphones", weight: 0.3}
+        - {text: "bracelet", weight: 1.0}
+        - {text: "ring", weight: 1.0}
+  
+  # ネガティブプロンプト
+  negative:
+    - "bad anatomy"
+    - "bad face"
+    - "deformed"
+    - "extra limbs"
+    - "low quality"
+    - "worst quality"
+    - "blurry"
+    - "realistic"
+    - "photo"
+
+# サンプラーの選択肢
+sampler_choices:
+  steps: [20, 25]
+  cfg: [6.0, 7.0]
+  sampler_name: ["euler", "dpmpp_2m"]
+  scheduler: ["karras", "normal"]
+
+# LoRAの選択肢
+lora_choices:
+  standard:
+    names: ["OneBreastOutLoRA_V1_1rank8.safetensors"]
+    model_strength: [0.0]
+    clip_strength: [0.0]
+  
+  perky_breasts:
+    model_strength: [0.4, 0.8]
+    clip_strength: [0.8, 1.2]
