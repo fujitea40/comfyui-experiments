@@ -62,23 +62,34 @@ cp config/config.example.yaml comfig/config.yaml
 nano config/config.yaml  # または任意のエディタで編集
 ```
 
+ワークフローファイルは、自身で準備して格納してください。
+開発者モードをONにして、File->Export(API)で出力します。
+サンプルとしてworkflowフォルダに１ファイル入れています。
+`config.yaml`にワークフローファイル名を指定してください。
+`workflow`フォルダは、自分の蓄積用に作ったものなので、
+違うフォルダに格納しても動作に問題ありません。
+
 ## ファイル構成
 
 ```
-project/
-├── main.py                 # メインプログラム
-├── config_loader.py        # 設定ファイル読み込み
-├── models.py              # データクラス定義
-├── prompt_builder.py      # プロンプト構築
-├── workflow.py            # ワークフロー操作
-├── comfyui_client.py      # ComfyUI API通信
-├── state_manager.py       # 状態管理
-├── utils.py               # 汎用ユーティリティ
-├── requirements.txt       # 依存パッケージ一覧
-├── DESIGN.md             # 設計ドキュメント
-├── README.md             # このファイル
-└── config/               # このファイル
-     └── config.yaml      # 設定ファイル（要作成）
+comfyui-experiments/
+├─project/
+|   ├── main.py                # メインプログラム
+|   ├── config_loader.py       # 設定ファイル読み込み
+|   ├── models.py              # データクラス定義
+|   ├── prompt_builder.py      # プロンプト構築
+|   ├── workflow.py            # ワークフロー操作
+|   ├── comfyui_client.py      # ComfyUI API通信
+|   ├── state_manager.py       # 状態管理
+|   ├── utils.py               # 汎用ユーティリティ
+|   ├── requirements.txt       # 依存パッケージ一覧
+|   ├── DESIGN.md              # 設計ドキュメント
+|   ├── README.md              # このファイル
+|   └── config/                # このファイル
+|       └── config.yaml        # 設定ファイル（要作成）
+└─workflow/                    # ワークフロー置き場
+  └── workflow.json            # ワークフローファイル（要作成）
+   
 ```
 
 ## 使い方
@@ -187,7 +198,7 @@ execution:
 
 # ワークフロー設定
 workflow:
-  json_path: "illust_image.json"      # ワークフローJSONファイル
+  json_path: "../workflow/illust_image.json"      # ワークフローJSONファイル
   output_root: "C:/ComfyUI/output"    # 出力ルート
   node_mapping:                       # ノードIDマッピング
     positive_prompt: "2"
@@ -211,11 +222,12 @@ prompt_template:
         - "long hair"
         - "short hair"
         - "bob cut"
-    
-    - name: "breasts"                 # 重み付き選択肢
+
+    - name: "angle"                   # 重みづけ軸
       choices:
-        - {text: "breasts out", weight: 1.0}
-        - {text: "nipple slip", weight: 0.5}
+        - {text: "front view", weight: 2.0}
+        - {text: "side view", weight: 0.3}
+        - {text: "back view", weight: 0.0}
   
   negative:                           # ネガティブプロンプト
     - "bad anatomy"
@@ -230,14 +242,9 @@ sampler_choices:
 
 # LoRAの選択肢
 lora_choices:
-  standard:
-    names: ["OneBreastOut.safetensors"]
-    model_strength: [0.0]
-    clip_strength: [0.0]
-  
-  perky_breasts:
-    model_strength: [0.4, 0.8]
-    clip_strength: [0.8, 1.2]
+  names: ["frilled_bikini.safetensors"]
+  model_strength: [0.4, 0.8]
+  clip_strength: [0.8, 1.2]
 ```
 
 ### 主要設定の説明
@@ -268,11 +275,11 @@ ComfyUIでワークフローを作成し、各ノードのIDを確認して設�
 
 - **重み付き選択**: `{text: "...", weight: ...}` 形式
   ```yaml
-  - name: "breasts"
-    choices:
-      - {text: "breasts out", weight: 1.0}
-      - {text: "nipple slip", weight: 0.5}
-      - {text: "", weight: 0.2}  # 空文字列も可
+    - name: "angle"
+      choices:
+        - {text: "front view", weight: 2.0}
+        - {text: "side view", weight: 0.3}
+        - {text: "", weight: 0.2}  # 空も可能
   ```
 
 ## 出力
@@ -413,7 +420,9 @@ python -c "from state_manager import StateManager; StateManager('axis_state.json
 | `state_manager.py` | 使用済み軸の状態管理 |
 | `utils.py` | 汎用ユーティリティ関数 |
 
+<! -- 作成してません。
 詳細は[DESIGN.md](DESIGN.md)を参照してください。
+-->
 
 ### 単体テスト（例）
 
@@ -456,7 +465,8 @@ logger.setLevel(logging.DEBUG)
 
 ## ライセンス
 
-（ライセンスを記載）
+Copyright (c) 2025 fuji-tea
+Released under the MIT License.
 
 ## 貢献
 
@@ -464,13 +474,6 @@ logger.setLevel(logging.DEBUG)
 プルリクエストも歓迎します。
 
 ## 更新履歴
-
-### v2.0.0 (2025-12-21)
-- モジュール化による全面リファクタリング
-- YAML/JSON設定ファイル対応
-- エラーハンドリングの強化
-- 進捗表示の改善
-- ログ機能の追加
 
 ### v1.0.0
 - 初回リリース

@@ -36,7 +36,7 @@ prompt_template:
     - name: "breasts"
       choices:
         - {text: "breasts out", weight: 1.0}
-        - {text: "one breast out", weight: 1.0}
+        - {text: "one breast out", weight: 0.7}
         - {text: "nipple slip", weight: 0.5}
         - {text: "sideboob", weight: 0.5}
         - {text: "underboob", weight: 0.5}
