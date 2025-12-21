@@ -23,7 +23,7 @@ from utils import (
     format_duration,
     estimate_time_remaining,
     print_progress_bar,
-    setup_logger
+    setup_logging
 )
 
 # ロガー
@@ -365,13 +365,9 @@ def main():
     # コマンドライン引数をパース
     args = parse_arguments()
     
-    # ロギング設定
+    # ロギング設定（ルートロガーを設定）
     log_level = logging.DEBUG if args.verbose else logging.INFO
-    logger = setup_logger(
-        name="image_generator",
-        level=log_level,
-        log_file=args.log_file
-    )
+    setup_logging(level=log_level, log_file=args.log_file)
     
     # 設定ファイルの存在確認
     if not args.config.exists():

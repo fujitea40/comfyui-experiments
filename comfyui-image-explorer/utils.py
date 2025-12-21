@@ -426,13 +426,61 @@ def validate_range(value: float, min_val: float, max_val: float, name: str = "va
 
 # ====== ロギングヘルパー ======
 
+def setup_logging(
+    level: int = logging.INFO,
+    log_file: Path = None,
+    log_format: str = None
+):
+    """
+    ルートロガーをセットアップ（すべてのモジュールに適用）
+    
+    Args:
+        level: ログレベル
+        log_file: ログファイルパス（Noneの場合はコンソールのみ）
+        log_format: ログフォーマット
+    """
+    # デフォルトのフォーマット
+    if log_format is None:
+        log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    
+    # ルートロガーを取得
+    root_logger = logging.getLogger()
+    root_logger.setLevel(level)
+    
+    # 既存のハンドラーをクリア
+    root_logger.handlers.clear()
+    
+    # フォーマッター
+    formatter = logging.Formatter(
+        log_format,
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # コンソールハンドラー
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    console_handler.setLevel(level)
+    root_logger.addHandler(console_handler)
+    
+    # ファイルハンドラー（オプション）
+    if log_file:
+        file_handler = logging.FileHandler(log_file, encoding='utf-8')
+        file_handler.setFormatter(formatter)
+        file_handler.setLevel(level)
+        root_logger.addHandler(file_handler)
+
+
 def setup_logger(
     name: str = __name__,
     level: int = logging.INFO,
     log_file: Path = None
 ) -> logging.Logger:
     """
-    ロガーをセットアップ
+    個別のロガーをセットアップ（後方互換性のため残す）
+    
+    Note:
+        新しいコードでは setup_logging() を推奨
+        この関数は既存コードとの互換性のために残されています
     
     Args:
         name: ロガー名
