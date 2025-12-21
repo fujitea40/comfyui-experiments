@@ -199,14 +199,11 @@ class ParameterCombinationGenerator:
         
         # LoRAの組み合わせ
         standard = self.lora_choices["standard"]
-        perky = self.lora_choices["perky_breasts"]
         
         lora_combos = list(itertools.product(
             standard["names"],
             standard["model_strength"],
-            standard["clip_strength"],
-            perky["model_strength"],
-            perky["clip_strength"]
+            standard["clip_strength"]
         ))
         
         # すべての組み合わせを生成
@@ -218,7 +215,7 @@ class ParameterCombinationGenerator:
             positive, negative = self.prompt_builder.build_prompts(axis_values)
             
             for steps, cfg, sampler_name, scheduler in sampler_combos:
-                for lora_name, lora_model, lora_clip, pb_model, pb_clip in lora_combos:
+                for lora_name, lora_model, lora_clip in lora_combos:
                     yield GenerationParams(
                         positive_prompt=positive,
                         negative_prompt=negative,
@@ -233,11 +230,6 @@ class ParameterCombinationGenerator:
                             name=lora_name,
                             model_strength=lora_model,
                             clip_strength=lora_clip
-                        ),
-                        perky_breasts_lora=LoraConfig(
-                            name="PerkBreasts.safetensors",  # 固定（設定から読み込むべき）
-                            model_strength=pb_model,
-                            clip_strength=pb_clip
                         ),
                         target_axis_name=target_axis_name,
                         prompt_values=axis_values
@@ -265,13 +257,10 @@ class ParameterCombinationGenerator:
         )
         
         standard = self.lora_choices["standard"]
-        perky = self.lora_choices["perky_breasts"]
         lora_count = (
             len(standard["names"]) *
             len(standard["model_strength"]) *
-            len(standard["clip_strength"]) *
-            len(perky["model_strength"]) *
-            len(perky["clip_strength"])
+            len(standard["clip_strength"]) 
         )
         
         return len(axis_combinations) * sampler_count * lora_count

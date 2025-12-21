@@ -112,7 +112,7 @@ def load_node_mapping(data: Dict[str, Any]) -> NodeMapping:
     """
     required_fields = [
         "positive_prompt", "negative_prompt", "ksampler",
-        "empty_latent", "save_image", "lora", "perky_breasts_lora"
+        "empty_latent", "save_image", "lora"
     ]
     
     for field in required_fields:
@@ -126,7 +126,6 @@ def load_node_mapping(data: Dict[str, Any]) -> NodeMapping:
         empty_latent=data["empty_latent"],
         save_image=data["save_image"],
         lora=data["lora"],
-        perky_breasts_lora=data["perky_breasts_lora"]
     )
 
 
@@ -363,8 +362,6 @@ class ConfigLoader:
         # 必須フィールドをチェック
         if "standard" not in choices:
             raise ValueError("lora_choicesには'standard'セクションが必要です")
-        if "perky_breasts" not in choices:
-            raise ValueError("lora_choicesには'perky_breasts'セクションが必要です")
         
         logger.info("LoRA選択肢を読み込みました")
         return choices

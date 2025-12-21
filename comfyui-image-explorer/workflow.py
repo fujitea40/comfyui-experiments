@@ -32,6 +32,7 @@ class WorkflowManager:
         self.config = workflow_config
         self.base_workflow = self._load_workflow()
         logger.info(f"ワークフローを読み込みました: {workflow_config.json_path}")
+
     
     def _load_workflow(self) -> Dict[str, Any]:
         """
@@ -123,11 +124,6 @@ class WorkflowManager:
             workflow,
             node_mapping.lora,
             params.lora
-        )
-        self._set_lora(
-            workflow,
-            node_mapping.perky_breasts_lora,
-            params.perky_breasts_lora
         )
         
         logger.debug("ワークフローにパラメータを適用しました")
@@ -266,7 +262,6 @@ class WorkflowManager:
             node_mapping.negative_prompt,
             node_mapping.ksampler,
             node_mapping.lora,
-            node_mapping.perky_breasts_lora,
             node_mapping.save_image
         ]
         
@@ -393,11 +388,6 @@ def example_usage():
             model_strength=0.0,
             clip_strength=0.0
         ),
-        perky_breasts_lora=LoraConfig(
-            name="PerkBreasts.safetensors",
-            model_strength=0.8,
-            clip_strength=1.2
-        ),
         target_axis_name="hair_style"
     )
     
@@ -456,11 +446,6 @@ def example_batch_creation():
                 name="test.safetensors",
                 model_strength=0.0,
                 clip_strength=0.0
-            ),
-            perky_breasts_lora=LoraConfig(
-                name="test2.safetensors",
-                model_strength=0.8,
-                clip_strength=1.2
             ),
             target_axis_name="expression"
         )

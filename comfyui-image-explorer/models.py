@@ -99,7 +99,6 @@ class GenerationParams:
     
     # LoRA
     lora: LoraConfig
-    perky_breasts_lora: LoraConfig
     
     # メタ情報
     target_axis_name: str  # 今回探索している軸
@@ -119,8 +118,6 @@ class GenerationParams:
             "lora": self.lora.name,
             "lora_model_strength": self.lora.model_strength,
             "lora_clip_strength": self.lora.clip_strength,
-            "perky_breasts_model_strength": self.perky_breasts_lora.model_strength,
-            "perky_breasts_clip_strength": self.perky_breasts_lora.clip_strength,
             "prompt_values": self.prompt_values
         }
 
@@ -136,7 +133,6 @@ class NodeMapping:
     empty_latent: str
     save_image: str
     lora: str
-    perky_breasts_lora: str
     
     @classmethod
     def default(cls) -> 'NodeMapping':
@@ -147,8 +143,6 @@ class NodeMapping:
             ksampler="4",
             empty_latent="5",
             save_image="7",
-            lora="18",
-            perky_breasts_lora="19"
         )
 
 

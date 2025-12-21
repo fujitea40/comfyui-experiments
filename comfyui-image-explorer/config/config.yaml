@@ -18,8 +18,7 @@ workflow:
     ksampler: "4"
     empty_latent: "5"
     save_image: "7"
-    lora: "18"
-    perky_breasts_lora: "19"
+    lora: "19"
 
 # プロンプトテンプレート
 prompt_template:
@@ -182,10 +181,6 @@ sampler_choices:
 # LoRAの選択肢
 lora_choices:
   standard:
-    names: ["OneBreastOutLoRA_V1_1rank8.safetensors"]
-    model_strength: [0.0]
-    clip_strength: [0.0]
-  
-  perky_breasts:
+    names: ["perky_breasts1.safetensors"]
     model_strength: [0.4, 0.8]
     clip_strength: [0.8, 1.2]

@@ -50,6 +50,7 @@ class ComfyUIClient:
             endpoint: APIエンドポイント
             **kwargs: requests.requestに渡す追加引数
         """
+        logger.debug(f"handle_request start: {kwargs}")
         url = self._make_url(endpoint)
         
         try:
@@ -218,6 +219,7 @@ class ComfyUIClient:
         Returns:
             ComfyUIResponse: 完了時の履歴データ、またはエラー
         """
+        logger.debug(f"execute_and_wait start")
         # キューに投入
         queue_response = self.queue_prompt(workflow)
         
