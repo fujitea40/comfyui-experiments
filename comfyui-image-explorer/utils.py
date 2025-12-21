@@ -53,7 +53,7 @@ def pick_from_choices(
         choices: 文字列リスト or (文字列, 重み) のタプルリスト
     
     Returns:
-        str: 選択された値
+        str: 選択された値（常に文字列）
     
     Examples:
         >>> pick_from_choices(["a", "b", "c"])
@@ -69,10 +69,16 @@ def pick_from_choices(
     
     # 重み付きタプルの場合
     if isinstance(first, tuple):
-        return weighted_choice(choices)
+        result = weighted_choice(choices)
+    else:
+        # 等確率の場合
+        result = random.choice(choices)
     
-    # 等確率の場合
-    return random.choice(choices)
+    # 結果が文字列でない場合は空文字列を返す
+    if not isinstance(result, str):
+        return ""
+    
+    return result
 
 
 # ====== ID生成 ======

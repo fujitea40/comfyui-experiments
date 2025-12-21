@@ -57,13 +57,16 @@ class PromptBuilder:
         axis = self.template.get_axis_by_name(axis_name)
         
         if is_target:
-            # 探索軸: すべての候補を返す
+            # 探索軸: すべての候補を返す（文字列に変換）
             return axis.get_all_values()
         else:
             # 非探索軸
             if self.randomize_non_target:
-                # ランダムに1個選択
+                # ランダムに1個選択（文字列として返す）
                 choice = pick_from_choices(axis.choices)
+                # WeightedPromptオブジェクトの場合は.textを取得
+                if isinstance(choice, WeightedPrompt):
+                    return [choice.text]
                 return [choice]
             else:
                 # 最初の1個を返す
