@@ -180,7 +180,6 @@ sampler_choices:
 
 # LoRAの選択肢
 lora_choices:
-  standard:
-    names: ["perky_breasts1.safetensors"]
-    model_strength: [0.4, 0.8]
-    clip_strength: [0.8, 1.2]
+  names: ["perky_breasts1.safetensors", "frilled_bikini.safetensors"]
+  model_strength: [0.4, 0.8]
+  clip_strength: [0.8, 1.2]

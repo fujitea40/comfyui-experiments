@@ -198,12 +198,11 @@ class ParameterCombinationGenerator:
         ))
         
         # LoRAの組み合わせ
-        standard = self.lora_choices["standard"]
         
         lora_combos = list(itertools.product(
-            standard["names"],
-            standard["model_strength"],
-            standard["clip_strength"]
+            self.lora_choices["names"],
+            self.lora_choices["model_strength"],
+            self.lora_choices["clip_strength"]
         ))
         
         # すべての組み合わせを生成
@@ -256,11 +255,10 @@ class ParameterCombinationGenerator:
             len(self.sampler_choices["scheduler"])
         )
         
-        standard = self.lora_choices["standard"]
         lora_count = (
-            len(standard["names"]) *
-            len(standard["model_strength"]) *
-            len(standard["clip_strength"]) 
+            len(self.lora_choices["names"]) *
+            len(self.lora_choices["model_strength"]) *
+            len(self.lora_choices["clip_strength"]) 
         )
         
         return len(axis_combinations) * sampler_count * lora_count

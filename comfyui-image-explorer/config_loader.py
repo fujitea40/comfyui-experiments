@@ -359,9 +359,6 @@ class ConfigLoader:
         logger.info("LoRA選択肢を読み込み中")
         choices = self.raw_data["lora_choices"]
         
-        # 必須フィールドをチェック
-        if "standard" not in choices:
-            raise ValueError("lora_choicesには'standard'セクションが必要です")
         
         logger.info("LoRA選択肢を読み込みました")
         return choices
