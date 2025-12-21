@@ -10,7 +10,7 @@ execution:
 
 # ワークフロー設定
 workflow:
-  json_path: "workflow/illust_image.json"
+  json_path: "../workflow/illust_image.json"
   output_root: "C:/ComfyUI/ComfyUI_windows_portable_nvidia/ComfyUI_windows_portable/ComfyUI/output"
   node_mapping:
     positive_prompt: "2"
