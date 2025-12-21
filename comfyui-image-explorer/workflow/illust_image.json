@@ -1,28 +1,28 @@
 {
   "2": {
     "inputs": {
-      "text": "1girl,\nanime style,\ncute face,\nbig eyes,\nsoft lighting,\nsimple background,\nbreasts out,\nblue hair,\nponytail,\nsmile,\nlooking at viewer,\narms behind back,\ndownblouse,\nnipple slip\n",
+      "text": "",
       "clip": [
-        "18",
+        "19",
         1
       ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "CLIPテキストエンコード（プロンプト）"
+      "title": "CLIP Text Encode (Prompt)"
     }
   },
   "3": {
     "inputs": {
-      "text": "bad anatomy,\nbad face,\ndeformed,\nextra limbs,\nlow quality,\nworst quality,\nblurry,\nrealistic,\nphoto",
+      "text": "",
       "clip": [
-        "18",
+        "19",
         1
       ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "CLIPテキストエンコード（プロンプト）"
+      "title": "CLIP Text Encode (Prompt)"
     }
   },
   "4": {
@@ -34,7 +34,7 @@
       "scheduler": "normal",
       "denoise": 1.0,
       "model": [
-        "18",
+        "19",
         0
       ],
       "positive": [
@@ -52,7 +52,7 @@
     },
     "class_type": "KSampler",
     "_meta": {
-      "title": "Kサンプラー"
+      "title": "KSampler"
     }
   },
   "5": {
@@ -63,7 +63,7 @@
     },
     "class_type": "EmptyLatentImage",
     "_meta": {
-      "title": "空の潜在画像"
+      "title": "Empty Latent Image"
     }
   },
   "6": {
@@ -79,7 +79,7 @@
     },
     "class_type": "VAEDecode",
     "_meta": {
-      "title": "VAEデコード"
+      "title": "VAE Decode"
     }
   },
   "7": {
@@ -92,7 +92,7 @@
     },
     "class_type": "SaveImage",
     "_meta": {
-      "title": "画像を保存"
+      "title": "Save Image"
     }
   },
   "12": {
@@ -101,64 +101,12 @@
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
-      "title": "チェックポイントを読み込む"
-    }
-  },
-  "15": {
-    "inputs": {
-      "lora_name": "frilled_bikini.safetensors",
-      "strength_model": 1,
-      "strength_clip": 1
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "LoRAを読み込む"
-    }
-  },
-  "16": {
-    "inputs": {
-      "lora_name": "negligee.safetensors",
-      "strength_model": 0.3,
-      "strength_clip": 0.3
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "LoRAを読み込む"
-    }
-  },
-  "17": {
-    "inputs": {
-      "lora_name": "OneBreastOutLoRA_V1_1rank8.safetensors",
-      "strength_model": 0.4,
-      "strength_clip": 0.4
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "LoRAを読み込む"
-    }
-  },
-  "18": {
-    "inputs": {
-      "lora_name": "frilled_bikini.safetensors",
-      "strength_model": 0.5,
-      "strength_clip": 0.5,
-      "model": [
-        "19",
-        0
-      ],
-      "clip": [
-        "19",
-        1
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "LoRAを読み込む"
+      "title": "Load Checkpoint"
     }
   },
   "19": {
     "inputs": {
-      "lora_name": "perky_breasts1.safetensors",
+      "lora_name": "",
       "strength_model": 0.2,
       "strength_clip": 0.2,
       "model": [
@@ -172,7 +120,7 @@
     },
     "class_type": "LoraLoader",
     "_meta": {
-      "title": "LoRAを読み込む"
+      "title": "Load LoRA"
     }
   }
 }
