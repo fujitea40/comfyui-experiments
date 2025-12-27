@@ -1,0 +1,844 @@
+{
+  "id": "d72ebf6b-95e1-4327-a180-a90e8b1f578b",
+  "revision": 0,
+  "last_node_id": 43,
+  "last_link_id": 101,
+  "nodes": [
+    {
+      "id": 20,
+      "type": "GroundingDinoModelLoader (segment anything)",
+      "pos": [
+        -416.60162149305313,
+        103.47233072222309
+      ],
+      "size": [
+        399.5259765625,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "GROUNDING_DINO_MODEL",
+          "type": "GROUNDING_DINO_MODEL",
+          "links": [
+            62
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GroundingDinoModelLoader (segment anything)"
+      },
+      "widgets_values": [
+        "GroundingDINO_SwinB (938MB)"
+      ]
+    },
+    {
+      "id": 25,
+      "type": "PreviewImage",
+      "pos": [
+        1140.2489680056142,
+        -136.28407126876115
+      ],
+      "size": [
+        140,
+        246.00000000000003
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 66
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 24,
+      "type": "MaskToImage",
+      "pos": [
+        860.3113888928475,
+        -92.87066870063047
+      ],
+      "size": [
+        193.2779296875,
+        26
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 65
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            66
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskToImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 29,
+      "type": "VAEEncodeForInpaint",
+      "pos": [
+        704.5863911530645,
+        612.0106457382125
+      ],
+      "size": [
+        322.6763671875,
+        98
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 74
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 79
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 95
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            94
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncodeForInpaint"
+      },
+      "widgets_values": [
+        3
+      ]
+    },
+    {
+      "id": 22,
+      "type": "GroundingDinoSAMSegment (segment anything)",
+      "pos": [
+        48.476648506946276,
+        -12.029709277776407
+      ],
+      "size": [
+        404.1744140625,
+        122
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "sam_model",
+          "type": "SAM_MODEL",
+          "link": 63
+        },
+        {
+          "name": "grounding_dino_model",
+          "type": "GROUNDING_DINO_MODEL",
+          "link": 62
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 61
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            65,
+            96
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GroundingDinoSAMSegment (segment anything)"
+      },
+      "widgets_values": [
+        "face, eyes, mouth",
+        0.35
+      ]
+    },
+    {
+      "id": 40,
+      "type": "SetLatentNoiseMask",
+      "pos": [
+        1197.7587975649035,
+        596.2643109837154
+      ],
+      "size": [
+        188.1373046875,
+        46
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 94
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 96
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            97
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SetLatentNoiseMask"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 21,
+      "type": "SAMModelLoader (segment anything)",
+      "pos": [
+        -400.03672149305345,
+        -46.94276927777657
+      ],
+      "size": [
+        335.6919921875,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAM_MODEL",
+          "type": "SAM_MODEL",
+          "links": [
+            63
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAMModelLoader (segment anything)"
+      },
+      "widgets_values": [
+        "sam_vit_l (1.25GB)"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        -341.5309999999995,
+        506.0239999999999
+      ],
+      "size": [
+        344,
+        314.00000000000006
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            61,
+            74
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            95
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "ComfyUI_00054_.png",
+        "image"
+      ]
+    },
+    {
+      "id": 32,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        975.2679115530667,
+        304.3274208382116
+      ],
+      "size": [
+        281.9,
+        98
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            76
+          ]
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            77,
+            78
+          ]
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            79,
+            83
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple"
+      },
+      "widgets_values": [
+        "meinamix_v12Final.safetensors"
+      ]
+    },
+    {
+      "id": 33,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1518.796321153065,
+        -177.10107426178823
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 77
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 98
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            80
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "1girl, \nfront view,\nfacing viewer,\nanime style,\nclean lineart, \nconsistent proportions,\nsimple shading, \ncharacter concept art, \nvisual novel style,\nhigh detail, \nhigh quality,\n\nneutral expression,\ncalm face,\nrelaxed mouth,\neyes open, relaxed eyes,\nemotionless, natural look"
+      ]
+    },
+    {
+      "id": 34,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1529.992461153065,
+        79.69464573821178
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 78
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            81
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "different hairstyle, different face shape,\ndifferent eye color, asymmetrical face,\nstrong lighting change,\ndeformed face\n"
+      ]
+    },
+    {
+      "id": 31,
+      "type": "KSampler",
+      "pos": [
+        2112.4431511530574,
+        -91.82160426178808
+      ],
+      "size": [
+        270,
+        262
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 76
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 80
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 81
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 97
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": 101
+        },
+        {
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": 99
+        },
+        {
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": 100
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            82
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        152848092228762,
+        "fixed",
+        25,
+        7,
+        "euler",
+        "normal",
+        0.35
+      ]
+    },
+    {
+      "id": 36,
+      "type": "SaveImage",
+      "pos": [
+        2520.249047019255,
+        -77.56574905339859
+      ],
+      "size": [
+        313.47265625,
+        270
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 84
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 35,
+      "type": "VAEDecode",
+      "pos": [
+        2329.393481153066,
+        250.73540573821282
+      ],
+      "size": [
+        140,
+        46
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 82
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 83
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            84
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 43,
+      "type": "ExpressionPresetNode",
+      "pos": [
+        1385.2422095023,
+        -454.62827379364643
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            98
+          ]
+        },
+        {
+          "name": "cfg",
+          "type": "FLOAT",
+          "links": [
+            99
+          ]
+        },
+        {
+          "name": "denoise",
+          "type": "FLOAT",
+          "links": [
+            100
+          ]
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "links": [
+            101
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ExpressionPresetNode"
+      },
+      "widgets_values": [
+        "1girl, anime style, clean lineart, consistent proportions, high quality, character illustration",
+        "big_smile_closed_eyes"
+      ]
+    }
+  ],
+  "links": [
+    [
+      61,
+      2,
+      0,
+      22,
+      2,
+      "IMAGE"
+    ],
+    [
+      62,
+      20,
+      0,
+      22,
+      1,
+      "GROUNDING_DINO_MODEL"
+    ],
+    [
+      63,
+      21,
+      0,
+      22,
+      0,
+      "SAM_MODEL"
+    ],
+    [
+      65,
+      22,
+      1,
+      24,
+      0,
+      "MASK"
+    ],
+    [
+      66,
+      24,
+      0,
+      25,
+      0,
+      "IMAGE"
+    ],
+    [
+      74,
+      2,
+      0,
+      29,
+      0,
+      "IMAGE"
+    ],
+    [
+      76,
+      32,
+      0,
+      31,
+      0,
+      "MODEL"
+    ],
+    [
+      77,
+      32,
+      1,
+      33,
+      0,
+      "CLIP"
+    ],
+    [
+      78,
+      32,
+      1,
+      34,
+      0,
+      "CLIP"
+    ],
+    [
+      79,
+      32,
+      2,
+      29,
+      1,
+      "VAE"
+    ],
+    [
+      80,
+      33,
+      0,
+      31,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      81,
+      34,
+      0,
+      31,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      82,
+      31,
+      0,
+      35,
+      0,
+      "LATENT"
+    ],
+    [
+      83,
+      32,
+      2,
+      35,
+      1,
+      "VAE"
+    ],
+    [
+      84,
+      35,
+      0,
+      36,
+      0,
+      "IMAGE"
+    ],
+    [
+      94,
+      29,
+      0,
+      40,
+      0,
+      "LATENT"
+    ],
+    [
+      95,
+      2,
+      1,
+      29,
+      2,
+      "MASK"
+    ],
+    [
+      96,
+      22,
+      1,
+      40,
+      1,
+      "MASK"
+    ],
+    [
+      97,
+      40,
+      0,
+      31,
+      3,
+      "LATENT"
+    ],
+    [
+      98,
+      43,
+      0,
+      33,
+      1,
+      "STRING"
+    ],
+    [
+      99,
+      43,
+      1,
+      31,
+      5,
+      "FLOAT"
+    ],
+    [
+      100,
+      43,
+      2,
+      31,
+      6,
+      "FLOAT"
+    ],
+    [
+      101,
+      43,
+      3,
+      31,
+      4,
+      "INT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8264462809917354,
+      "offset": [
+        -656.732216875528,
+        699.6447047561834
+      ]
+    },
+    "frontendVersion": "1.35.9",
+    "workflowRendererVersion": "LG"
+  },
+  "version": 0.4
+}
