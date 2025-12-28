@@ -29,9 +29,11 @@ workflowとカスタムノードを適用することで、expression_presetカ�
 #### 導入方法
 **comfyui_segment_anything**の導入については、記載のサイトを確認してください。
 **expression_preset**は、本リポジトリよりチェックアウトして配置すればOK
+```
   ComfyUI/
     └──custom_nodes/
 |        └─── expression_preset
+```
 
 workflowには上記カスタムノードの他、実際に動作確認したモデルが設定されてしまっています。自身で使っているモデルに差し替え、プリセットも調整の上使用してください。
 expression_preset内でプリセットされているパラメータの変更方法は、[README](../expression_preset/README.md)を参照してください。
