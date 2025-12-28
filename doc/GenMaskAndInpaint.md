@@ -32,7 +32,7 @@ workflowとカスタムノードを適用することで、expression_presetカ�
 ```
   ComfyUI/
     └──custom_nodes/
-|        └─── expression_preset
+        └─── expression_preset
 ```
 
 workflowには上記カスタムノードの他、実際に動作確認したモデルが設定されてしまっています。自身で使っているモデルに差し替え、プリセットも調整の上使用してください。
