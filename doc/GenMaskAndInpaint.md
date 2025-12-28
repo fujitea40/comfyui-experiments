@@ -38,9 +38,15 @@ workflowとカスタムノードを適用することで、expression_presetカ�
 workflowには上記カスタムノードの他、実際に動作確認したモデルが設定されてしまっています。自身で使っているモデルに差し替え、プリセットも調整の上使用してください。
 expression_preset内でプリセットされているパラメータの変更方法は、[README](../expression_preset/README.md)を参照してください。
 
-MeinaMixで生成した画像は割ときれいに生成されました(上画像)が、SDXLはいまいち表情でなかったり、Refineを実行しないためか元画像に比べると荒く感じました。
-私はあまりこのパラメータ調整には興味がないので、どういう風にして欲しいといった意見をいただけると助かります。
+SD1.5系のモデルで生成した画像は比較的表情がきれいに生成されました(上画像)が、SDXLはいまいち表情が出ません。基本的にはSD1.5系が前提としてください。
 
+### 確認済みモデル
++ [MeinaMix v12](https://civitai.com/models/7240/meinamix)
++ [Anything V3](https://civitai.com/models/66?modelVersionId=75)
+  + BigSmileは閉じた目が崩れやすいので、denoise低め推奨
++ [Counterfeit-V3.0](https://civitai.com/models/4468?modelVersionId=57618)
+  + 崩れやすいのでランダムシードで何度か生成必要
++ [Pastel-Mix](https://civitai.com/models/5414?modelVersionId=6297)
 
 ## 今後の更新予定
 
@@ -48,10 +54,19 @@ MeinaMixで生成した画像は割ときれいに生成されました(上画�
 
 + 顔のみの差分画像も保存対象とする可能性あり。立ち絵差分の用途と考えると現状の差分含んだ全身画像で十分かと思っているが、要望があれば。
 + 一発で全表情を出力可能にする。
-+ パラメータのjsonまたはyamlファイルによる外部ファイル化
 + 実用向けに、[comfyui-image-explorer](../comfyui-image-explorer/)の機構を利用して、複数パラメータパターンの差し替えをAPI実行し、一回で同一表情を複数パターン生成、取捨選択可能にする。
 + その他の箇所（ポーズ、髪型、アクセサリー）の差分生成自動化
 + ControlNet併用で安定感向上（現状SDXLモデル試したところdenoise上げないと弱いし、上げるとかなり崩れる）
+
+## 生成サンプル
++ MeinaMix
+  ![MeinaMix](../doc/img/GenMaskAndInpaint.png)
++ Anything
+  ![Anything](../doc/img/GenMaskAndInpaint_anything.png)
++ Counterfeit
+  ![Counterfeit](../doc/img/GenMaskAndInpaint_counterfate.png)
++ Pastel-Mix
+  ![Pastel-Mix](../doc/img/GenMaskAndInpaint_pastelMix.png)
 
 ## ライセンス
 

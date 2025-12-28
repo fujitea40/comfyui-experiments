@@ -9,28 +9,25 @@
   ComfyUI/
     └──custom_nodes/
 |        └─── expression_preset
+              ├─── __init__.py
+              ├─── expression_preset.py
+              └─── expression_presets.yaml   # 設定ファイル
 ```
++ expression_presets.yamlに各プロンプト、パラメータを好み、モデルに合わせて設定してください。
+    + パラメータはデフォルト値があるので、上書きしたい場合だけ入力
+```
+defaults:
+  params:
+    steps: 25
+    cfg: 8.0
+    denoise: 0.48
 
-+ 現時点では、パラメータはソースにハードコーディングしています。ソースの該当箇所を確認し、必要に応じて自分のモデルに適したパラメータに書き換えてください。
-    + 表情用プロンプト部分
-    ```
-            expr_prompt = {
-            "neutral": (
-                "neutral expression, calm face, relaxed mouth, eyes open, relaxed eyes, "
-                "emotionless, natural look, same eye color, consistent eye color"
-            ),
-            "smile": (
-                "gentle smile, soft smile, slightly curved mouth, happy but calm expression, "
-                "eyes relaxed"
-            ),
-    ```
-    + パラメータ値部分
-    ```
-            params = {
-            "neutral":     {"steps": 25, "cfg": 8.0, "denoise": 0.28},
-            "smile":       {"steps": 25, "cfg": 8.0, "denoise": 0.48},
-            "big_smile_closed_eyes": {"steps": 25, "cfg": 8.0, "denoise": 0.48},
-    ```
+expressions:
+  neutral:
+    expr_prompt: "neutral expression, calm face, relaxed mouth, eyes open, relaxed eyes, emotionless, natural look, same eye color, consistent eye color"
+    params:
+      denoise: 0.28
+```
 
 + 設定した**Expression Preset Selector**ノードからの出力は、以下のようにテキストエンコーダーとKsamplerノードに接続します。
 ![usage](../doc/img/Expression_Preset_Selector_usage.png)

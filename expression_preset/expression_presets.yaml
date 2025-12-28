@@ -1,0 +1,70 @@
+defaults:
+  params:
+    steps: 25
+    cfg: 8.0
+    denoise: 0.48
+
+expressions:
+  neutral:
+    expr_prompt: "neutral expression, calm face, relaxed mouth, eyes open, relaxed eyes, emotionless, natural look, same eye color, consistent eye color"
+    params:
+      denoise: 0.28
+
+  smile:
+    expr_prompt: "gentle smile, soft smile, slightly curved mouth, happy but calm expression, eyes relaxed"
+
+  big_smile_closed_eyes:
+    expr_prompt: "big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks"
+
+  angry:
+    expr_prompt: "angry expression, furrowed eyebrows, sharp eyes, tight mouth"
+    params:
+      cfg: 7.0
+      denoise: 0.30
+
+  sad:
+    expr_prompt: "sad expression, downcast eyes, slightly trembling lips, teary eyes"
+
+  surprised:
+    expr_prompt: "surprised expression, wide eyes, slightly open mouth, raised eyebrows"
+    params:
+      cfg: 7.0
+      denoise: 0.30
+
+  embarrassed:
+    expr_prompt: "embarrassed expression, blushing cheeks, awkward smile, eyes slightly averted"
+
+  laugh:
+    expr_prompt: "laughing, open mouth smile, wide smile, joyful expression, raised cheeks, eyes slightly squinted, bright eyes"
+    params:
+      cfg: 7.0
+      denoise: 0.30
+
+  wink:
+    expr_prompt: "winking, one eye closed, playful smile, slight head tilt, cheeky expression, one eye open ,asymmetric eyes, wink"
+    params:
+      cfg: 8.0
+      denoise: 0.35
+
+  flustered:
+    expr_prompt: "flustered expression, nervous smile, worried eyebrows, sweat drop, slightly open mouth, tense face"
+    params:
+      cfg: 8.0
+      denoise: 0.40
+
+  smug:
+    expr_prompt: "smug expression, smug smile, smirk, half-lidded eyes, confident look, slightly raised eyebrow"
+    params:
+      denoise: 0.35
+
+  mild_fear:
+    expr_prompt: "slightly scared, uneasy expression, worried eyebrows, tense face, eyes slightly widened, lips pressed, subtle trembling"
+    params:
+      cfg: 7.5
+      denoise: 0.35
+
+  fear:
+    expr_prompt: "terrified expression, fear, wide eyes, small pupils, raised and furrowed eyebrows, trembling, pale face, open mouth, gasping, cold sweat"
+    params:
+      cfg: 7.0
+      denoise: 0.40
