@@ -1,5 +1,7 @@
 # 表情差分作成ワークフロー（ComfyUI）
 
+日本語 | [English](GenMaskAndInpaint.en.md)
+
 [キャラ表情差分生成用ワークフロー](../workflow/GenmaskAndInpaint.json)は、**立ち絵素材から表情差分を安定して生成するための ComfyUI ワークフローおよびカスタムノード構成**をまとめたものです。
 
 - 顔のみを inpaint で差し替え

@@ -1,4 +1,7 @@
 # comfyui-experiments
+
+日本語 | [English](README.en.md)
+
 ComfyUI用に何か作ったものを入れてます。
 いずれも実験的に作ったもので、十分なデータでテストしたものではありません。
 もし要望やうまくいかない点があればIssueで挙げてもらえると助かります。
@@ -20,6 +23,15 @@ ComfyUI用に何か作ったものを入れてます。
 
 ## [表情プリセットカスタムノード](./expression_preset/README.md)
 
-上記のワークフローで簡単に生成する表情を変更できるよう、あらかいじめプリセットしておくためのカスタムノードです。
+上記のワークフローで簡単に生成する表情を変更できるよう、あらかじめプリセットしておくためのカスタムノードです。
 このカスタムノードで表情名、プロンプト、パラメータを保持しておき、ワークフローからは表情を選択するだけで適切なプロンプトを入力するようにします。
+
+## Credits (Models)
+
+Images in this repository were generated using the following model(s):
+
+- MeinaMix — by Meina (Civitai) — Attribution required (per Civitai permissions)
+- Pastel-Mix — by andite (Civitai)
+- Counterfeit — by rpdwdw (Civitai)
+- Anything — by Yuno779 (Civitai)
 
