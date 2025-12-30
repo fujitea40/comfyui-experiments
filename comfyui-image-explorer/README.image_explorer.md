@@ -100,20 +100,20 @@ comfyui-experiments/
 
 ```bash
 # デフォルト設定で実行
-python main.py
+python scripts/image_explorer.py
 
 # 設定ファイルを指定
-python main.py -c config.yaml
+python scripts/image_explorer.py -c config.yaml
 ```
 
 ### コマンドライン引数
 
 ```bash
-python main.py --help
+python scripts/image_explorer.py --help
 ```
 
 ```
-usage: main.py [-h] [-c CONFIG] [-p] [-v] [--log-file LOG_FILE]
+usage: scripts/image_explorer.py [-h] [-c CONFIG] [-p] [-v] [--log-file LOG_FILE]
 
 ComfyUI画像生成ツール - 複数のプロンプトパラメータを探索
 
@@ -131,7 +131,7 @@ optional arguments:
 #### 1. 通常実行
 
 ```bash
-$ python main.py
+$ python scripts/image_explorer.py
 
 ============================================================
 ComfyUI画像生成ツールを起動します
@@ -176,13 +176,13 @@ ComfyUI画像生成ツールを起動します
 #### 2. 進捗のみ確認
 
 ```bash
-python main.py -p
+python scripts/image_explorer.py -p
 ```
 
 #### 3. 詳細ログ付きで実行
 
 ```bash
-python main.py -v --log-file generation.log
+python scripts/image_explorer.py -v --log-file generation.log
 ```
 
 ## 設定ファイル（config.yaml）
@@ -413,14 +413,14 @@ python -c "from state_manager import StateManager; StateManager('axis_state.json
 
 | モジュール | 責務 |
 |----------|------|
-| `main.py` | メインプログラム、全体のオーケストレーション |
-| `config_loader.py` | 設定ファイル（YAML/JSON）の読み込み |
-| `models.py` | データクラス定義 |
-| `prompt_builder.py` | プロンプト構築、パラメータ組み合わせ生成 |
-| `workflow.py` | ワークフローJSONの操作 |
-| `comfyui_client.py` | ComfyUI APIとの通信 |
-| `state_manager.py` | 使用済み軸の状態管理 |
-| `utils.py` | 汎用ユーティリティ関数 |
+| `scripts/image_explorer.py` | メインプログラム、全体のオーケストレーション |
+| `src/image_explorer/config/config_loader.py` | 設定ファイル（YAML/JSON）の読み込み |
+| `src/comfytools/models.py` | データクラス定義 |
+| `src/image_explorer/prompt_builder.py` | プロンプト構築、パラメータ組み合わせ生成 |
+| `src/image_explorer/config/workflow.py` | ワークフローJSONの操作 |
+| `src/comfytools/comfyui_client.py` | ComfyUI APIとの通信 |
+| `src/image_explorer/state_manager.py` | 使用済み軸の状態管理 |
+| `src/comfytools/utils.py` | 汎用ユーティリティ関数 |
 
 <! -- 作成してません。
 詳細は[DESIGN.md](DESIGN.md)を参照してください。

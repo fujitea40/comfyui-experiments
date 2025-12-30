@@ -412,14 +412,14 @@ Node ID 2 not found
 
 | Module | Responsibility |
 |---|---|
-| `main.py` | Orchestration / entry point |
-| `config_loader.py` | Load YAML/JSON config |
-| `models.py` | Dataclass definitions |
-| `prompt_builder.py` | Build prompts / generate combinations |
-| `workflow.py` | Edit workflow JSON |
-| `comfyui_client.py` | Communicate with ComfyUI API |
-| `state_manager.py` | Track used axes |
-| `utils.py` | Shared utilities |
+| `scripts/image_explorer.py` | Orchestration / entry point |
+| `src/image_explorer/config/config_loader.py` | Load YAML/JSON config |
+| `src/comfytools/models.py` | Dataclass definitions |
+| `src/image_explorer/prompt_builder.py` | Build prompts / generate combinations |
+| `src/image_explorer/config/workflow.py` | Edit workflow JSON |
+| `src/comfytools/comfyui_client.py` | Communicate with ComfyUI API |
+| `src/image_explorer/state_manager.py` | Track used axes |
+| `src/comfytools/utils.py` | Shared utilities |
 
 > `DESIGN.md` is referenced in the Japanese README, but may not exist yet.
 
