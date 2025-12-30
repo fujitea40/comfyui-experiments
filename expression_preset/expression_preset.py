@@ -1,4 +1,5 @@
 import os
+import json
 from typing import Any, Dict, Tuple
 
 
@@ -243,15 +244,15 @@ class ExpressionPresetNode:
                 "expression": (expressions,),
             }
         }
-
-    # まとめたprompt文字列 + cfg/denoise/steps を返す例（必要に応じて増減OK）
-    RETURN_TYPES = ("STRING", "FLOAT", "FLOAT", "INT")
-    RETURN_NAMES = ("prompt", "cfg", "denoise", "steps")
+    # まとめたprompt文字列 + cfg/denoise/steps に加えて、バッチ実行向けのメタ情報も返す
+    # 先頭4つ（prompt/cfg/denoise/steps）は既存互換のため順序維持
+    RETURN_TYPES = ("STRING", "FLOAT", "FLOAT", "INT", "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("prompt", "cfg", "denoise", "steps", "expression", "expr_prompt", "meta_json")
 
     FUNCTION = "run"
     CATEGORY = "Expression"
 
-    def run(self, common_prompt: str, expression: str) -> Tuple[str, float, float, int]:
+    def run(self, common_prompt: str, expression: str) -> Tuple[str, float, float, int, str, str, str]:
         presets = self.__class__._load_presets()
         expressions: Dict[str, Any] = presets.get("expressions") or {}
 
@@ -277,4 +278,14 @@ class ExpressionPresetNode:
         denoise = float(params.get("denoise"))
         steps = int(params.get("steps"))
 
-        return (combined, cfg, denoise, steps)
+        meta = {
+            "schema": "expression_preset_v1",
+            "expression": expression,
+            "common_prompt": base,
+            "expr_prompt": diff,
+            "combined_prompt": combined,
+            "params": {"steps": steps, "cfg": cfg, "denoise": denoise},
+        }
+        meta_json = json.dumps(meta, ensure_ascii=False, sort_keys=True)
+
+        return (combined, cfg, denoise, steps, expression, diff, meta_json)
