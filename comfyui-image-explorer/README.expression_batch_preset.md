@@ -91,6 +91,13 @@ ComfyUI の開発者モードをONにして、`File -> Export (API)` で JSON �
 config で node_id を指定するため、ComfyUI で該当ノードの node_id を確認してください。
 （ExportしたJSON内で `"10": {...}` のようなキーが node_id です）
 
+### おまけ
+
+立ち絵の作成には、併せて公開している[ComfyUI画像生成探索ツール](README.image_explorer.md)も使用してみてください。
+ある程度立ち絵用に合わせた設定ファイルも含めています。
+
+`python scripts/image_explorer.py -c config/explorer_standingpicture.yaml`
+
 ---
 
 ## 使い方

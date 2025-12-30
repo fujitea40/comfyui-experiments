@@ -100,6 +100,16 @@ Optional (supported if present/configured):
 Since the config file requires node IDs, check the `node_id` in ComfyUI (or in the exported JSON).
 In the exported JSON, keys like `"10": { ... }` represent the `node_id`.
 
+### Bonus
+
+If you're creating many standing character images, you may also want to try the companion tool:  
+[ComfyUI Image Generation Explorer](README.image_explorer.md).
+
+It includes a sample configuration file tailored for standing character images.
+
+`python scripts/image_explorer.py -c config/explorer_standingpicture.yaml`
+
+
 ---
 
 ## Usage
