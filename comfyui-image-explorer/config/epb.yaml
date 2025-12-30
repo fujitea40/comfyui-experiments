@@ -6,7 +6,7 @@
 comfy_url: "http://127.0.0.1:8188"
 
 # Workflow JSON (API format prompt json)
-workflow_json: "../workflows/GenmaskAndInpaint_API.json"
+workflow_json: "D:/git_repos/comfyui-experiments/workflow/GenmaskAndInpaint_API.json"
 
 # Local output root (for meta.json logs etc.)
 # NOTE: SaveImage の実際の保存先は ComfyUI 側の output 設定に依存します。

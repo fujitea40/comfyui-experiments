@@ -6,11 +6,13 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
+import logging
 
 import yaml
 
 from expression_preset_batch.models import ExpressionPresetNodeMapping, normalize_expressions
 
+logger = logging.getLogger(__name__)
 
 def _resolve_path(base_dir: Path, raw: str) -> Path:
     p = Path(raw)
@@ -149,6 +151,8 @@ class ConfigLoader:
         if not isinstance(output_root_raw, str) or not output_root_raw.strip():
             output_root_raw = "./outputs"
 
+        logger.debug("Loaded workflow_json: %s", workflow_json_raw)
+        logger.debug("self.base_dir: %s", self.base_dir)
         return EPBWorkflowRef(
             workflow_json=_resolve_path(self.base_dir, workflow_json_raw.strip()),
             output_root=_resolve_path(self.base_dir, output_root_raw.strip()),
