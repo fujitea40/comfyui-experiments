@@ -31,6 +31,13 @@ This is a custom node for predefining presets so you can easily switch expressio
 
 The node stores the expression name, prompt, and parameters. From the workflow, you only need to select the expression, and the appropriate prompt/parameters will be applied automatically.
 
+## [Character Expression Variation Batch Tool](./comfyui-image-explorer/README.expression_batch_preset.md)
+
+Using the expression-variation workflow and the ExpressionPresetNode custom node described above, this tool generates expression variations in bulk for all images under the specified folder.
+
+You can also generate multiple variations per expression by setting the number of repeats, making it easy to pick the best results.
+
+
 ## Credits (Models)
 
 Images in this repository were generated using the following model(s):
