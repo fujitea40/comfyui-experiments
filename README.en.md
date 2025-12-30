@@ -8,7 +8,7 @@ All of them are experimental and have **not** been tested with sufficient data.
 If you have requests or run into issues, I'd appreciate it if you could open an Issue.
 (I may not always be able to respond.)
 
-## [Prompt Exploration Tool](./comfyui-image-explorer)
+## [Prompt Exploration Tool](./comfyui-image-explorer/README.image_explorer.en.md)
 
 By writing prompt candidates per category in a config file, you can generate request patterns such as:
 

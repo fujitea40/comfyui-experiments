@@ -6,6 +6,10 @@ import requests
 from typing import Optional, Dict, Any
 from dataclasses import dataclass
 import logging
+import mimetypes
+from pathlib import Path
+from typing import Union
+
 
 logger = logging.getLogger(__name__)
 
@@ -284,6 +288,55 @@ class ComfyUIClient:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """コンテキストマネージャー対応"""
         self.close()
+
+    def upload_image(
+        self,
+        image_path: Union[str, Path],
+        *,
+        name: Optional[str] = None,
+        image_type: str = "input",
+        subfolder: str = "",
+        overwrite: bool = False,
+    ) -> ComfyUIResponse:
+        """
+        ComfyUIの input/temp/output ディレクトリへ画像をアップロードする。
+    
+        ComfyUI API: POST /upload/image
+          - form-data:
+              image: (file)
+              type: "input" | "temp" | "output"
+              subfolder: "" (optional)
+              overwrite: "true"/"1" なら上書き、それ以外はリネームして衝突回避
+        返却: {"name": filename, "subfolder": subfolder, "type": image_type}
+        """
+        path = Path(image_path)
+        if not path.exists():
+            return ComfyUIResponse(
+                success=False,
+                error_message=f"Image not found: {path}"
+            )
+    
+        upload_name = name or path.name
+    
+        mime, _ = mimetypes.guess_type(upload_name)
+        if mime is None:
+            mime = "application/octet-stream"
+    
+        data = {
+            "type": image_type,
+            "overwrite": "true" if overwrite else "false",
+            "subfolder": subfolder or "",
+        }
+    
+        with path.open("rb") as f:
+            files = {"image": (upload_name, f, mime)}
+            return self._handle_request(
+                method="POST",
+                endpoint="/upload/image",
+                data=data,
+                files=files,
+            )
+
 
 
 # ====== 使用例 ======

@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 import logging
 
-from models import (
+from comfytools.core_models import (
     GenerationParams, SamplerConfig, LoraConfig,
     NodeMapping, WorkflowConfig
 )

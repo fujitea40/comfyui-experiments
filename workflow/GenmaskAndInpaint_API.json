@@ -74,7 +74,7 @@
   },
   "29": {
     "inputs": {
-      "grow_mask_by": 3,
+      "grow_mask_by": 0,
       "pixels": [
         "2",
         0
@@ -95,7 +95,7 @@
   },
   "31": {
     "inputs": {
-      "seed": 152848092228762,
+      "seed": 862789797102689,
       "steps": [
         "43",
         3
@@ -105,7 +105,7 @@
         1
       ],
       "sampler_name": "euler",
-      "scheduler": "normal",
+      "scheduler": "karras",
       "denoise": [
         "43",
         2
@@ -223,6 +223,48 @@
     "class_type": "ExpressionPresetNode",
     "_meta": {
       "title": "Expression Preset Selector"
+    }
+  },
+  "45": {
+    "inputs": {
+      "preview": "big_smile_closed_eyes",
+      "previewMode": false,
+      "source": [
+        "43",
+        4
+      ]
+    },
+    "class_type": "PreviewAny",
+    "_meta": {
+      "title": "Preview as Text"
+    }
+  },
+  "46": {
+    "inputs": {
+      "preview": "{\"combined_prompt\": \"1girl, anime style, clean lineart, consistent proportions, high quality, character illustration, big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks\", \"common_prompt\": \"1girl, anime style, clean lineart, consistent proportions, high quality, character illustration\", \"expr_prompt\": \"big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks\", \"expression\": \"big_smile_closed_eyes\", \"params\": {\"cfg\": 8.0, \"denoise\": 0.48, \"steps\": 25}, \"schema\": \"expression_preset_v1\"}",
+      "previewMode": false,
+      "source": [
+        "43",
+        6
+      ]
+    },
+    "class_type": "PreviewAny",
+    "_meta": {
+      "title": "Preview as Text"
+    }
+  },
+  "47": {
+    "inputs": {
+      "preview": "big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks",
+      "previewMode": false,
+      "source": [
+        "43",
+        5
+      ]
+    },
+    "class_type": "PreviewAny",
+    "_meta": {
+      "title": "Preview as Text"
     }
   }
 }

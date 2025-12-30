@@ -1,0 +1,118 @@
+# ComfyUI画像生成ツール設定ファイル
+
+# 実行設定
+execution:
+  repeats: 2
+  randomize_non_target: true
+  comfy_url: "http://127.0.0.1:8188"
+  state_file: "axis_state.json"
+  poll_interval: 1.0
+
+# ワークフロー設定
+workflow:
+  json_path: "../workflow/illust_image.json"
+  output_root: "C:/ComfyUI/ComfyUI_windows_portable_nvidia/ComfyUI_windows_portable/ComfyUI/output"
+  node_mapping:
+    positive_prompt: "2"
+    negative_prompt: "3"
+    ksampler: "4"
+    empty_latent: "5"
+    save_image: "7"
+    lora: "19"
+
+# プロンプトテンプレート
+prompt_template:
+  # 固定ポジティブプロンプト
+  fixed_positive:
+    - "1girl"
+    - "anime style"
+    - "cute face"
+    - "big eyes"
+    - "soft lighting"
+    - "simple background"
+  
+  # 可変軸
+  axes:
+    - name: "breasts"
+      choices:
+        - {text: "breasts out", weight: 1.0}
+        - {text: "one breast out", weight: 0.7}
+        - {text: "nipple slip", weight: 0.5}
+    
+    - name: "hair_style"
+      choices:
+        - "long hair"
+        - "ponytail"
+        - "side ponytail"
+    
+    - name: "hair_color"
+      choices:
+        - "brown hair"
+        - "blonde hair"
+        - "blue hair"
+        - "silver hair"
+        - "red hair"
+        - "purple hair"
+        - "green hair"
+    
+    - name: "expression"
+      choices:
+        - "smile"
+        - "shy smile"
+        - "embarrassed"
+    
+    - name: "gaze"
+      choices:
+        - "looking at viewer"
+        - "looking away"
+        - "face close-up"
+    
+    - name: "pose"
+      choices:
+        - "standing"
+        - "leaning forward"
+    
+    - name: "outfit"
+      choices:
+        - "nude"
+        - "casual outfit"
+        - "lingerie"
+        - "negligee"
+    
+    - name: "state"
+      choices:
+        - {text: "", weight: 3.0}
+    
+    - name: "angle"
+      choices:
+        - {text: "front view", weight: 2.0}
+        - {text: "three-quarter view", weight: 3.0}
+    
+    - name: "accessory"
+      choices:
+        - {text: "", weight: 3.0}
+  
+  # ネガティブプロンプト
+  negative:
+    - "bad anatomy"
+    - "bad face"
+    - "deformed"
+    - "extra limbs"
+    - "low quality"
+    - "worst quality"
+    - "blurry"
+    - "realistic"
+    - "photo"
+
+# サンプラーの選択肢
+sampler_choices:
+  steps: [20]
+  cfg: [6.0]
+  sampler_name: ["euler"]
+  scheduler: ["karras"]
+
+# LoRAの選択肢
+lora_choices:
+  names: ["perky_breasts1.safetensors"]
+  model_strength: [0.4, 0.8]
+  clip_strength: [0.8, 1.2]

@@ -1,0 +1,90 @@
+# ============================
+# Expression Preset Batch Config (example)
+# ============================
+
+# ComfyUI server
+comfy_url: "http://127.0.0.1:8188"
+
+# Workflow JSON (API format prompt json)
+workflow_json: "../workflows/GenmaskAndInpaint_API.json"
+
+# Local output root (for meta.json logs etc.)
+# NOTE: SaveImage の実際の保存先は ComfyUI 側の output 設定に依存します。
+output_root: "C:/ComfyUI/ComfyUI_windows_portable/ComfyUI/output"
+
+# ----------------------------
+# Input image settings (LoadImage etc.)
+# ----------------------------
+input_image:
+  # LoadImage など "image" filename を参照するノードID
+  node_id: "2"
+  # 通常は "image"
+  input_name: "image"
+
+  # 外部ツールから ComfyUI に画像をアップロードするか
+  upload: true
+  # ComfyUIの /upload/image の type（通常は input）
+  upload_type: "input"
+  # 基本は空（LoadImageがsubfolderを扱えない/弱い場合があるため）
+  upload_subfolder: ""
+  # 同名ファイルが input/ にある場合に上書きするか
+  overwrite: false
+
+# ----------------------------
+# ExpressionPresetNode settings
+# ----------------------------
+expression_preset:
+  # ExpressionPresetNode の node_id
+  node_id: "43"
+  # ExpressionPresetNode が受け取る expression の入力名（実装が "expression" ならこれ）
+  expression_input_name: "expression"
+
+  # 実行する表情の順序
+  expressions:
+    - neutral
+    - smile
+    - big_smile_closed_eyes
+    - angry
+    - sad
+    - surprised
+    - embarrassed
+
+# ----------------------------
+# SaveImage prefix override (optional)
+# ----------------------------
+save_image:
+  # SaveImage ノードの node_id（prefix差し替えをしたい場合のみ指定）
+  node_id: "36"
+
+  # SaveImage.inputs["filename_prefix"] へ入れるテンプレ
+  # 使える変数: {image} {expr} {run} {seed}
+  filename_prefix_template: "{image}/{expr}/{run}/img"
+
+# ----------------------------
+# Seed node override (optional)
+# ----------------------------
+seed_node:
+  # KSampler 等の node_id（seedを外部から差し替えたい場合のみ指定）
+  node_id: "31"
+  # 通常は "seed"
+  input_name: "seed"
+
+# ----------------------------
+# Run settings
+# ----------------------------
+run:
+  # 1画像×1expressionあたりの繰り返し回数（seedバリエーション）
+  repeats: 3
+
+  # ComfyUI /history へのポーリング間隔（秒）
+  poll_interval: 1.0
+
+  # 最大待ち時間（秒）。null で無制限待ち
+  timeout_sec: 600
+
+  # seed の決め方
+  # - time: 現在時刻由来のランダム
+  # - increment: seed_base + カウンタ
+  # - fixed: seed_base 固定
+  seed_strategy: "time"
+  seed_base: 0

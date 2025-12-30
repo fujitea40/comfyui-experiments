@@ -7,11 +7,11 @@ import itertools
 from typing import List, Dict, Any, Tuple, Iterator
 import logging
 
-from models import (
+from comfytools.core_models import (
     PromptTemplate, PromptAxis, WeightedPrompt,
     GenerationParams, SamplerConfig, LoraConfig
 )
-from utils import pick_from_choices, join_prompts
+from comfytools.utils import pick_from_choices, join_prompts
 
 logger = logging.getLogger(__name__)
 
