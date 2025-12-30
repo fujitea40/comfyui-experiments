@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import List, Union, Dict, Any
 import logging
 
-from models import (
+from comfytools.core_models import (
     WeightedPrompt, PromptAxis, PromptTemplate,
     SamplerConfig, LoraConfig, NodeMapping,
     WorkflowConfig, ExecutionConfig

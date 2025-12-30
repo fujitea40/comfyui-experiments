@@ -9,14 +9,18 @@ import argparse
 from pathlib import Path
 from typing import Optional
 import logging
+# srcパスを追加
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from config_loader import ConfigLoader
-from models import GenerationParams
-from prompt_builder import PromptBuilder, ParameterCombinationGenerator
-from workflow import WorkflowManager
-from comfyui_client import ComfyUIClient
-from state_manager import StateManager, print_progress
-from utils import (
+
+from image_explorer.config.config_loader import ConfigLoader
+from image_explorer.prompt_builder import PromptBuilder, ParameterCombinationGenerator
+from image_explorer.config.workflow import WorkflowManager
+from image_explorer.state_manager import StateManager, print_progress
+
+from comfytools.core_models import GenerationParams
+from comfytools.comfyui_client import ComfyUIClient
+from comfytools.utils import (
     generate_seed,
     generate_run_id,
     ensure_directory,
@@ -333,7 +337,7 @@ def parse_arguments():
     parser.add_argument(
         "-c", "--config",
         type=Path,
-        default=Path("config/config.yaml"),
+        default=Path("config/explorer.yaml"),
         help="設定ファイルのパス (デフォルト: config.yaml)"
     )
     
