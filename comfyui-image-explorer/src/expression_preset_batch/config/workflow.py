@@ -66,7 +66,9 @@ class EPBWorkflowManager:
     def get_base_workflow(self) -> Workflow:
         return copy.deepcopy(self.base_workflow)
 
-    def create_workflow(self, params: GenerationParams, *, input_image_filename: str) -> Workflow:
+    def create_workflow(
+        self, params: GenerationParams, *, input_image_filename: str
+    ) -> Workflow:
         wf = self.get_base_workflow()
 
         # 1) 入力画像
@@ -88,12 +90,16 @@ class EPBWorkflowManager:
     def set_input_image_filename(self, workflow: Workflow, filename: str) -> None:
         node = self.get_node_info(workflow, self.input_image_node_id)
         if node is None:
-            logger.warning("Input image node not found. node_id=%s", self.input_image_node_id)
+            logger.warning(
+                "Input image node not found. node_id=%s", self.input_image_node_id
+            )
             return
 
         inputs = node.get("inputs")
         if not isinstance(inputs, dict):
-            logger.warning("Input image node inputs invalid. node_id=%s", self.input_image_node_id)
+            logger.warning(
+                "Input image node inputs invalid. node_id=%s", self.input_image_node_id
+            )
             return
 
         key = self.input_image_input_name
@@ -103,7 +109,9 @@ class EPBWorkflowManager:
             logger.warning(
                 "Skip overwriting input image because it is a link(list). "
                 "node_id=%s input=%s existing=%r",
-                self.input_image_node_id, key, existing
+                self.input_image_node_id,
+                key,
+                existing,
             )
             return
 
@@ -112,12 +120,17 @@ class EPBWorkflowManager:
     def apply_expression(self, workflow: Workflow, expression: str) -> None:
         node = self.get_node_info(workflow, self.expression_node.node_id)
         if node is None:
-            logger.warning("Expression node not found. node_id=%s", self.expression_node.node_id)
+            logger.warning(
+                "Expression node not found. node_id=%s", self.expression_node.node_id
+            )
             return
 
         inputs = node.get("inputs")
         if not isinstance(inputs, dict):
-            logger.warning("Expression node inputs invalid. node_id=%s", self.expression_node.node_id)
+            logger.warning(
+                "Expression node inputs invalid. node_id=%s",
+                self.expression_node.node_id,
+            )
             return
 
         key = self.expression_node.expression_input_name
@@ -127,7 +140,9 @@ class EPBWorkflowManager:
             logger.warning(
                 "Skip overwriting expression because it is a link(list). "
                 "node_id=%s input=%s existing=%r",
-                self.expression_node.node_id, key, existing
+                self.expression_node.node_id,
+                key,
+                existing,
             )
             return
 
@@ -154,7 +169,9 @@ class EPBWorkflowManager:
             logger.warning(
                 "Skip overwriting seed because it is a link(list). "
                 "node_id=%s input=%s existing=%r",
-                self.seed_node_id, key, existing
+                self.seed_node_id,
+                key,
+                existing,
             )
             return
 
@@ -166,12 +183,16 @@ class EPBWorkflowManager:
 
         node = self.get_node_info(workflow, self.save_image_node_id)
         if node is None:
-            logger.warning("SaveImage node not found. node_id=%s", self.save_image_node_id)
+            logger.warning(
+                "SaveImage node not found. node_id=%s", self.save_image_node_id
+            )
             return
 
         inputs = node.get("inputs")
         if not isinstance(inputs, dict):
-            logger.warning("SaveImage node inputs invalid. node_id=%s", self.save_image_node_id)
+            logger.warning(
+                "SaveImage node inputs invalid. node_id=%s", self.save_image_node_id
+            )
             return
 
         existing = inputs.get("filename_prefix")
@@ -179,7 +200,8 @@ class EPBWorkflowManager:
             logger.warning(
                 "Skip overwriting filename_prefix because it is a link(list). "
                 "node_id=%s existing=%r",
-                self.save_image_node_id, existing
+                self.save_image_node_id,
+                existing,
             )
             return
 
@@ -191,17 +213,24 @@ class EPBWorkflowManager:
 
         # input image
         if self.get_node_info(wf, self.input_image_node_id) is None:
-            logger.error("Input image node missing: node_id=%s", self.input_image_node_id)
+            logger.error(
+                "Input image node missing: node_id=%s", self.input_image_node_id
+            )
             ok = False
 
         # expression
         expr_node = self.get_node_info(wf, self.expression_node.node_id)
         if expr_node is None:
-            logger.error("Expression node missing: node_id=%s", self.expression_node.node_id)
+            logger.error(
+                "Expression node missing: node_id=%s", self.expression_node.node_id
+            )
             ok = False
 
         # save image (optional)
-        if self.save_image_node_id and self.get_node_info(wf, self.save_image_node_id) is None:
+        if (
+            self.save_image_node_id
+            and self.get_node_info(wf, self.save_image_node_id) is None
+        ):
             logger.error("SaveImage node missing: node_id=%s", self.save_image_node_id)
             ok = False
 
@@ -223,6 +252,8 @@ class EPBWorkflowManager:
         if node is None:
             return None
         if not isinstance(node, dict):
-            logger.warning("Node is not a dict. node_id=%s type=%s", node_id, type(node))
+            logger.warning(
+                "Node is not a dict. node_id=%s type=%s", node_id, type(node)
+            )
             return None
         return node
