@@ -3,16 +3,20 @@
 from __future__ import annotations
 
 import json
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
-import logging
 
 import yaml
 
-from expression_preset_batch.models import ExpressionPresetNodeMapping, normalize_expressions
+from expression_preset_batch.models import (
+    ExpressionPresetNodeMapping,
+    normalize_expressions,
+)
 
 logger = logging.getLogger(__name__)
+
 
 def _resolve_path(base_dir: Path, raw: str) -> Path:
     p = Path(raw)
@@ -194,9 +198,13 @@ class ConfigLoader:
 
         expressions = normalize_expressions(expressions_raw)
         if not expressions:
-            raise ValueError("expression_preset.expressions must contain at least one expression")
+            raise ValueError(
+                "expression_preset.expressions must contain at least one expression"
+            )
 
-        mapping = ExpressionPresetNodeMapping(node_id=node_id, expression_input_name=input_name)
+        mapping = ExpressionPresetNodeMapping(
+            node_id=node_id, expression_input_name=input_name
+        )
         mapping.validate()
 
         return {"mapping": mapping, "expressions": expressions}
@@ -209,10 +217,16 @@ class ConfigLoader:
             raise ValueError("save_image must be mapping when specified")
 
         node_id = sec.get("node_id")
-        if node_id is not None and (not isinstance(node_id, str) or not node_id.strip()):
-            raise ValueError("save_image.node_id must be non-empty string when specified")
+        if node_id is not None and (
+            not isinstance(node_id, str) or not node_id.strip()
+        ):
+            raise ValueError(
+                "save_image.node_id must be non-empty string when specified"
+            )
 
-        template = _optional_str(sec, "filename_prefix_template", "{image}/{expr}/{run}/img")
+        template = _optional_str(
+            sec, "filename_prefix_template", "{image}/{expr}/{run}/img"
+        )
 
         return {
             "node_id": node_id.strip() if isinstance(node_id, str) else None,
@@ -231,7 +245,9 @@ class ConfigLoader:
             return {"node_id": None, "input_name": "seed"}
 
         if not isinstance(node_id, str) or not node_id.strip():
-            raise ValueError("seed_node.node_id must be non-empty string when specified")
+            raise ValueError(
+                "seed_node.node_id must be non-empty string when specified"
+            )
 
         input_name = _optional_str(sec, "input_name", "seed")
         return {"node_id": node_id.strip(), "input_name": input_name}
@@ -243,7 +259,11 @@ class ConfigLoader:
         if not isinstance(run, dict):
             raise ValueError("run must be mapping when specified")
 
-        comfy_url = _require_str(self.raw, "comfy_url", "root") if "comfy_url" in self.raw else _require_str(run, "comfy_url", "run")
+        comfy_url = (
+            _require_str(self.raw, "comfy_url", "root")
+            if "comfy_url" in self.raw
+            else _require_str(run, "comfy_url", "run")
+        )
         repeats = _optional_int(run, "repeats", 1)
         poll_interval = _optional_float(run, "poll_interval", 1.0)
 
