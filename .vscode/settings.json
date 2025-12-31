@@ -1,0 +1,29 @@
+{
+  // --- Ruff をフォーマッタにする（Format Document / 保存時整形） ---
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+
+    // 保存時に Ruff で自動修正＆import整理（必要なら）
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+
+  // Ruff側の基本（任意）
+  "ruff.lineLength": 88,
+
+  // --- Mypy（型チェック） ---
+  // まずは open files だけでOK。重いなら reportingScope を触る
+  // "mypy-type-checker.reportingScope": "file", などは設定候補
+  "mypy-type-checker.args": ["--config-file=pyproject.toml"],
+
+  // pipで入れた mypy を使いたいなら:
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+
+  // --- Pylint（必要なら） ---
+  // pipで入れた pylint を使いたいなら:
+  "pylint.importStrategy": "fromEnvironment",
+  "pylint.args": ["--rcfile=.pylintrc"]
+}

@@ -205,3 +205,21 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# テスト・カバレッジ関連
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+*.cover
+coverage.xml
+.tox/
+
+# VS Code: 個人用ワークスペースファイルは除外
+*.code-workspace
+
+# 必要なら、VS Code のローカル履歴・拡張系の生成物があれば除外
+.vscode/*.log
+
+# 探索済み保存ファイルは対象外
+axis_state.json
