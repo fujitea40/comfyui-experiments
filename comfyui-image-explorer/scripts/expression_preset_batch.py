@@ -5,18 +5,31 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-from pathlib import Path
-from typing import Iterable, List, Optional
 
 # src を import パスに追加（scripts直叩き用）
 import sys
+from pathlib import Path
+from typing import Iterable, List
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from comfytools.comfyui_client import ComfyUIClient
-from comfytools.utils import generate_run_id, generate_seed, safe_filename, ensure_directory, setup_logging
-from expression_preset_batch.config.config_loader import quick_load
-from expression_preset_batch.config.workflow import EPBWorkflowManager
-from expression_preset_batch.models import GenerationParams
+from comfytools.utils import (
+    ensure_directory,
+    generate_run_id,
+    generate_seed,
+    safe_filename,
+    setup_logging,
+)
+from expression_preset_batch.config.config_loader import (
+    quick_load,
+)
+from expression_preset_batch.config.workflow import (
+    EPBWorkflowManager,
+)
+from expression_preset_batch.models import (
+    GenerationParams,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +37,9 @@ logger = logging.getLogger(__name__)
 DEFAULT_EXTS = [".png", ".jpg", ".jpeg", ".webp"]
 
 
-def iter_image_files(images_dir: Path, *, recursive: bool, exts: List[str]) -> Iterable[Path]:
+def iter_image_files(
+    images_dir: Path, *, recursive: bool, exts: List[str]
+) -> Iterable[Path]:
     exts_norm = {e.lower() for e in exts}
     if recursive:
         for p in images_dir.rglob("*"):
@@ -45,7 +60,9 @@ def compute_seed(strategy: str, base: int, index: int) -> int:
     return int(base) + int(index)
 
 
-def render_prefix(template: str, *, image_stem: str, expr: str, run_id: str, seed: int) -> str:
+def render_prefix(
+    template: str, *, image_stem: str, expr: str, run_id: str, seed: int
+) -> str:
     # 使える変数: {image} {expr} {run} {seed}
     return template.format(
         image=safe_filename(image_stem),
@@ -62,18 +79,30 @@ def write_meta_json(path: Path, meta: dict) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="ExpressionPresetNode-based batch runner for ComfyUI")
-    p.add_argument("-c", "--config", type=str, default="config/epb.yaml", help="Config YAML/JSON path")
-    p.add_argument("-i", "--images-dir", type=str, required=True, help="Input images directory")
-    p.add_argument("--recursive", action="store_true", help="Search images recursively")
-    p.add_argument("--limit", type=int, default=0, help="Process only first N images (0=all)")
-    p.add_argument("--dry-run", action="store_true", help="Do not call ComfyUI API (show planned actions)")
-    p.add_argument("--verbose", action="store_true", help="Enable debug logging")
-    p.add_argument(
-        "--log-file",
-        type=Path,
-        help="ログをファイルに出力"
+    p = argparse.ArgumentParser(
+        description="ExpressionPresetNode-based batch runner for ComfyUI"
     )
+    p.add_argument(
+        "-c",
+        "--config",
+        type=str,
+        default="config/epb.yaml",
+        help="Config YAML/JSON path",
+    )
+    p.add_argument(
+        "-i", "--images-dir", type=str, required=True, help="Input images directory"
+    )
+    p.add_argument("--recursive", action="store_true", help="Search images recursively")
+    p.add_argument(
+        "--limit", type=int, default=0, help="Process only first N images (0=all)"
+    )
+    p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Do not call ComfyUI API (show planned actions)",
+    )
+    p.add_argument("--verbose", action="store_true", help="Enable debug logging")
+    p.add_argument("--log-file", type=Path, help="ログをファイルに出力")
     return p.parse_args()
 
 
@@ -126,7 +155,12 @@ def main() -> int:
         logger.warning("No image files found in %s", images_dir)
         return 0
 
-    logger.info("Found %d images. expressions=%d repeats=%d", len(files), len(expressions), run.repeats)
+    logger.info(
+        "Found %d images. expressions=%d repeats=%d",
+        len(files),
+        len(expressions),
+        run.repeats,
+    )
 
     seed_counter = 0
 
@@ -165,7 +199,10 @@ def main() -> int:
                 seed = compute_seed(run.seed_strategy, run.seed_base, seed_counter)
                 seed_counter += 1
 
-                prefix_template = save_image_cfg.get("filename_prefix_template") or "{image}/{expr}/{run}/img"
+                prefix_template = (
+                    save_image_cfg.get("filename_prefix_template")
+                    or "{image}/{expr}/{run}/img"
+                )
                 filename_prefix = render_prefix(
                     prefix_template,
                     image_stem=image_stem,
@@ -194,16 +231,28 @@ def main() -> int:
                 }
 
                 # メタ保存先（ローカル側のログ/再実行用）
-                meta_dir = Path(cfg["output_root"]) / safe_filename(image_stem) / safe_filename(expr) / safe_filename(run_id)
+                meta_dir = (
+                    Path(cfg["output_root"])
+                    / safe_filename(image_stem)
+                    / safe_filename(expr)
+                    / safe_filename(run_id)
+                )
                 meta_path = meta_dir / "meta.json"
 
                 if args.dry_run:
-                    logger.info("[dry-run] would run: expr=%s seed=%s prefix=%s", expr, seed, filename_prefix)
+                    logger.info(
+                        "[dry-run] would run: expr=%s seed=%s prefix=%s",
+                        expr,
+                        seed,
+                        filename_prefix,
+                    )
                     write_meta_json(meta_path, {**meta, "dry_run": True})
                     continue
 
                 # workflow生成（B案: 入力画像/expr/seed/prefix を workflow.py が反映）
-                workflow = mgr.create_workflow(params, input_image_filename=uploaded_name)
+                workflow = mgr.create_workflow(
+                    params, input_image_filename=uploaded_name
+                )
 
                 # 実行
                 result = client.execute_and_wait(
@@ -214,11 +263,18 @@ def main() -> int:
 
                 meta["success"] = bool(result.success)
                 if result.success:
-                    meta["history"] = result.data  # /history のレスポンス（サイズが大きい場合は要注意）
+                    meta["history"] = (
+                        result.data
+                    )  # /history のレスポンス（サイズが大きい場合は要注意）
                     logger.info("done: expr=%s seed=%s", expr, seed)
                 else:
                     meta["error"] = result.error_message
-                    logger.error("failed: expr=%s seed=%s err=%s", expr, seed, result.error_message)
+                    logger.error(
+                        "failed: expr=%s seed=%s err=%s",
+                        expr,
+                        seed,
+                        result.error_message,
+                    )
 
                 write_meta_json(meta_path, meta)
 
