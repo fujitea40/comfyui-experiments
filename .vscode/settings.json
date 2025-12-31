@@ -6,8 +6,8 @@
 
     // 保存時に Ruff で自動修正＆import整理（必要なら）
     "editor.codeActionsOnSave": {
-      "source.fixAll.ruff": "explicit",
-      "source.organizeImports.ruff": "explicit"
+      "source.fixAll.ruff": "always",
+      "source.organizeImports.ruff": "always"
     }
   },
 
