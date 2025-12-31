@@ -16,7 +16,7 @@ from __future__ import annotations
 #       まずは実在するモジュールに合わせて調整してください。
 
 try:
-    from .prompt_builder import PromptBuilder, ParameterCombinationGenerator
+    from .prompt_builder import ParameterCombinationGenerator, PromptBuilder
 except Exception:  # pragma: no cover
     # まだ分割途中でもパッケージ import 自体は通したい場合の保険
     PromptBuilder = None  # type: ignore
