@@ -15,7 +15,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TypeAlias
 
-
 # まずは設定ファイルに書く値をそのまま通す（必要になったら Enum/Literal に強化）
 Expression: TypeAlias = str
 
@@ -34,14 +33,18 @@ class ExpressionPresetNodeMapping:
     expression_input_name: str = "expression"
 
     # 将来拡張（必要になったら使う）
-    # - common_prompt_input_name: Optional[str] = None  # 例: 共通プロンプト追記欄がある場合
-    # - params_output_linked: bool = True              # 例: 下流がリンクで接続されている前提など
+    # - common_prompt_input_name: Optional[str] = None
+    # 例: 共通プロンプト追記欄がある場合
+    # - params_output_linked: bool = True
+    # 例: 下流がリンクで接続されている前提など
 
     def validate(self) -> None:
         if not self.node_id:
             raise ValueError("ExpressionPresetNodeMapping.node_id must be non-empty.")
         if not self.expression_input_name:
-            raise ValueError("ExpressionPresetNodeMapping.expression_input_name must be non-empty.")
+            raise ValueError(
+                "ExpressionPresetNodeMapping.expression_input_name must be non-empty."
+            )
 
 
 @dataclass
@@ -59,7 +62,7 @@ class GenerationParams:
     注:
     - repeats は ExecutionConfig 側に持たせても良いが、
       「この実行アイテムは何回繰り返すか」を持たせたい場合もあるので optional にしている。
-    """
+    """  # noqa: E501
 
     expression: Expression
     seed: int
@@ -67,10 +70,10 @@ class GenerationParams:
     # SaveImage の filename_prefix に設定する値（例: "{run_id}/img"）
     filename_prefix: str = "img"
 
-    # 出力先（ツール側で管理する場合に使用。ComfyUI側が絶対パス保存しない構成でもメタ用途に）
+    # 出力先（ツール側で管理する場合に使用。ComfyUI側が絶対パス保存しない構成でもメタ用途に） # noqa: E501
     output_dir: Optional[Path] = None
 
-    # 必要なら個別に上書きできるように（Noneなら ExecutionConfig の repeats を採用、など）
+    # 必要なら個別に上書きできるように（Noneなら ExecutionConfig の repeats を採用、など） # noqa: E501
     repeats: Optional[int] = None
 
     # 将来拡張用（expression以外の追加指示を入れたい場合に使う）
@@ -86,9 +89,16 @@ class GenerationParams:
         if self.seed < -1:
             raise ValueError("GenerationParams.seed must be >= -1.")
         if self.repeats is not None and self.repeats <= 0:
-            raise ValueError("GenerationParams.repeats must be positive when specified.")
-        if not isinstance(self.filename_prefix, str) or not self.filename_prefix.strip():
-            raise ValueError("GenerationParams.filename_prefix must be a non-empty string.")
+            raise ValueError(
+                "GenerationParams.repeats must be positive when specified."
+            )
+        if (
+            not isinstance(self.filename_prefix, str)
+            or not self.filename_prefix.strip()
+        ):
+            raise ValueError(
+                "GenerationParams.filename_prefix must be a non-empty string."
+            )
 
     def to_dict(self) -> Dict[str, Any]:
         return {
