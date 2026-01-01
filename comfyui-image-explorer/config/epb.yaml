@@ -30,6 +30,23 @@ input_image:
   # 同名ファイルが input/ にある場合に上書きするか
   overwrite: false
 
+# Sampler（KSampler等）の差し替え設定
+sampler_node:
+  node_id: "31"              # KSampler の node id
+  steps_input: "steps"
+  cfg_input: "cfg"
+  denoise_input: "denoise"
+  sampler_name_input: "sampler_name"
+  scheduler_input: "scheduler"
+
+# 全通り探索する候補値
+sampler_sweep:
+  steps: [15, 20, 25]
+  cfg: [5.0, 6.0, 7.0]
+  denoise: [0.25, 0.30, 0.35, 0.40, 0.45]
+  sampler: ["dpmpp_2m_sde", "euler_a"]
+  scheduler: ["karras", "normal"]
+
 # ----------------------------
 # ExpressionPresetNode settings
 # ----------------------------
