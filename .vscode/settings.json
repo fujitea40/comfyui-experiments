@@ -25,7 +25,14 @@
   // --- Pylint（必要なら） ---
   // pipで入れた pylint を使いたいなら:
   "pylint.importStrategy": "fromEnvironment",
-  "pylint.args": ["--rcfile=.pylintrc"],
 
-  "python.analysis.extraPaths": ["./comfyui-image-explorer/src"]
+  "python.analysis.extraPaths": ["./comfyui-image-explorer/src"],
+  "pylint.enabled": true,
+  //"pylint.cwd": "${workspaceFolder}",
+  "pylint.cwd": "${workspaceFolder}/comfyui-image-explorer",
+  "pylint.args": ["--rcfile=${workspaceFolder}/.pylintrc"],
+  "pylint.severity": {
+    "missing-trace-io": "Warning"
+  }
+  //"pylint.args": ["--rcfile=${workspaceFolder}/.pylintrc"]
 }

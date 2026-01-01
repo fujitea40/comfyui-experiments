@@ -1,0 +1,7 @@
+[MASTER]
+init-hook=import sys, os; sys.path.insert(0, os.path.join(os.getcwd(), "src" ))
+load-plugins=tools.pylint_plugins.require_trace_io
+
+[MESSAGES CONTROL]
+disable=all
+enable=missing-trace-io
