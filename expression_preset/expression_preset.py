@@ -131,14 +131,20 @@ def _validate_and_compose_presets(presets: Dict[str, Any]) -> Dict[str, Any]:
 
         expr_prompt = conf.get("expr_prompt")
         if not isinstance(expr_prompt, str) or not expr_prompt.strip():
-            raise ValueError(f"expression '{name}' is missing a non-empty 'expr_prompt'")
+            raise ValueError(
+                f"expression '{name}' is missing a non-empty 'expr_prompt'"
+            )
 
         merged_params = _deep_merge(defaults_params, conf.get("params") or {})
         if not isinstance(merged_params, dict):
             raise ValueError(f"expression '{name}'.params must be a mapping (dict)")
 
         # Required params: steps, cfg, denoise
-        if "steps" not in merged_params or "cfg" not in merged_params or "denoise" not in merged_params:
+        if (
+            "steps" not in merged_params
+            or "cfg" not in merged_params
+            or "denoise" not in merged_params
+        ):
             raise ValueError(
                 f"expression '{name}' params must include steps/cfg/denoise (use defaults.params to avoid repetition)"
             )
@@ -181,7 +187,9 @@ class ExpressionPresetNode:
         # If YAML lib isn't available, just use defaults.
         if yaml is None:
             if not cls._CACHE_PRESETS:
-                print("[ExpressionPresetNode] PyYAML not found. Using built-in defaults.")
+                print(
+                    "[ExpressionPresetNode] PyYAML not found. Using built-in defaults."
+                )
                 cls._CACHE_PRESETS = _validate_and_compose_presets(DEFAULT_PRESETS)
                 cls._CACHE_MTIME = -1.0
             return cls._CACHE_PRESETS
@@ -189,7 +197,9 @@ class ExpressionPresetNode:
         # If file doesn't exist, use defaults.
         if not os.path.exists(path):
             if not cls._CACHE_PRESETS:
-                print(f"[ExpressionPresetNode] YAML not found: {path}. Using built-in defaults.")
+                print(
+                    f"[ExpressionPresetNode] YAML not found: {path}. Using built-in defaults."
+                )
                 cls._CACHE_PRESETS = _validate_and_compose_presets(DEFAULT_PRESETS)
                 cls._CACHE_MTIME = -1.0
             return cls._CACHE_PRESETS
@@ -209,7 +219,9 @@ class ExpressionPresetNode:
                 raw = yaml.safe_load(f)
 
             normalized = _normalize_yaml_schema(raw)
-            merged = _deep_merge(DEFAULT_PRESETS, normalized)  # allow overriding defaults/expressions
+            merged = _deep_merge(
+                DEFAULT_PRESETS, normalized
+            )  # allow overriding defaults/expressions
             composed = _validate_and_compose_presets(merged)
 
             cls._CACHE_PRESETS = composed
@@ -218,7 +230,9 @@ class ExpressionPresetNode:
             return cls._CACHE_PRESETS
 
         except Exception as e:
-            print(f"[ExpressionPresetNode] Failed to load YAML presets ({path}): {e}. Using built-in defaults.")
+            print(
+                f"[ExpressionPresetNode] Failed to load YAML presets ({path}): {e}. Using built-in defaults."
+            )
             cls._CACHE_PRESETS = _validate_and_compose_presets(DEFAULT_PRESETS)
             cls._CACHE_MTIME = -1.0
             return cls._CACHE_PRESETS
@@ -244,21 +258,36 @@ class ExpressionPresetNode:
                 "expression": (expressions,),
             }
         }
+
     # まとめたprompt文字列 + cfg/denoise/steps に加えて、バッチ実行向けのメタ情報も返す
     # 先頭4つ（prompt/cfg/denoise/steps）は既存互換のため順序維持
     RETURN_TYPES = ("STRING", "FLOAT", "FLOAT", "INT", "STRING", "STRING", "STRING")
-    RETURN_NAMES = ("prompt", "cfg", "denoise", "steps", "expression", "expr_prompt", "meta_json")
+    RETURN_NAMES = (
+        "prompt",
+        "cfg",
+        "denoise",
+        "steps",
+        "expression",
+        "expr_prompt",
+        "meta_json",
+    )
 
     FUNCTION = "run"
     CATEGORY = "Expression"
 
-    def run(self, common_prompt: str, expression: str) -> Tuple[str, float, float, int, str, str, str]:
+    def run(
+        self, common_prompt: str, expression: str
+    ) -> Tuple[str, float, float, int, str, str, str]:
         presets = self.__class__._load_presets()
         expressions: Dict[str, Any] = presets.get("expressions") or {}
 
         if expression not in expressions:
             # fallback to neutral if exists, otherwise first key
-            expression = "neutral" if "neutral" in expressions else next(iter(expressions.keys()))
+            expression = (
+                "neutral"
+                if "neutral" in expressions
+                else next(iter(expressions.keys()))
+            )
 
         preset = expressions[expression]
         expr_prompt = preset.get("expr_prompt", "")
