@@ -17,6 +17,7 @@ from comfytools.core_models import (
     WeightedPrompt,
     WorkflowConfig,
 )
+from dtrace_loging.logging.trace import trace_io
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ logger = logging.getLogger(__name__)
 # ====== 個別のローダー関数 ======
 
 
+@trace_io(level=logging.DEBUG)
 def load_weighted_prompt(
     data: Union[str, Dict[str, Any]],
 ) -> Union[str, WeightedPrompt]:
@@ -51,6 +53,7 @@ def load_weighted_prompt(
         raise ValueError(f"不正なプロンプト形式: {type(data)}")
 
 
+@trace_io(level=logging.DEBUG)
 def load_prompt_axis(data: Dict[str, Any]) -> PromptAxis:
     """
     辞書からPromptAxisを生成
@@ -80,6 +83,7 @@ def load_prompt_axis(data: Dict[str, Any]) -> PromptAxis:
     )
 
 
+@trace_io(level=logging.DEBUG)
 def load_prompt_template(data: Dict[str, Any]) -> PromptTemplate:
     """
     辞書からPromptTemplateを生成
@@ -104,6 +108,7 @@ def load_prompt_template(data: Dict[str, Any]) -> PromptTemplate:
     )
 
 
+@trace_io(level=logging.DEBUG)
 def load_node_mapping(data: Dict[str, Any]) -> NodeMapping:
     """
     辞書からNodeMappingを生成
@@ -137,6 +142,7 @@ def load_node_mapping(data: Dict[str, Any]) -> NodeMapping:
     )
 
 
+@trace_io(level=logging.DEBUG)
 def load_workflow_config(data: Dict[str, Any]) -> WorkflowConfig:
     """
     辞書からWorkflowConfigを生成
@@ -161,6 +167,7 @@ def load_workflow_config(data: Dict[str, Any]) -> WorkflowConfig:
     )
 
 
+@trace_io(level=logging.DEBUG)
 def load_execution_config(data: Dict[str, Any]) -> ExecutionConfig:
     """
     辞書からExecutionConfigを生成
@@ -183,6 +190,7 @@ def load_execution_config(data: Dict[str, Any]) -> ExecutionConfig:
 # ====== ファイル読み込み ======
 
 
+@trace_io(level=logging.DEBUG)
 def load_yaml_file(yaml_path: Path) -> Dict[str, Any]:
     """
     YAMLファイルから辞書を読み込み
@@ -212,6 +220,7 @@ def load_yaml_file(yaml_path: Path) -> Dict[str, Any]:
         raise
 
 
+@trace_io(level=logging.DEBUG)
 def load_json_file(json_path: Path) -> Dict[str, Any]:
     """
     JSONファイルから辞書を読み込み
@@ -275,7 +284,7 @@ class ConfigLoader:
         logger.info(f"設定ファイルを読み込みました: {config_path}")
 
     # ====== 各種設定の読み込み ======
-
+    @trace_io(level=logging.DEBUG)
     def load_prompt_template(self) -> PromptTemplate:
         """
         プロンプトテンプレートを読み込み
@@ -296,6 +305,7 @@ class ConfigLoader:
         )
         return template
 
+    @trace_io(level=logging.DEBUG)
     def load_workflow_config(self) -> WorkflowConfig:
         """
         ワークフロー設定を読み込み
@@ -314,6 +324,7 @@ class ConfigLoader:
         logger.info(f"ワークフロー設定を読み込みました: {config.json_path}")
         return config
 
+    @trace_io(level=logging.DEBUG)
     def load_execution_config(self) -> ExecutionConfig:
         """
         実行設定を読み込み
@@ -332,6 +343,7 @@ class ConfigLoader:
         logger.info(f"実行設定を読み込みました（繰り返し: {config.repeats}）")
         return config
 
+    @trace_io(level=logging.DEBUG)
     def load_sampler_choices(self) -> Dict[str, List]:
         """
         サンプラーの選択肢リストを読み込み
@@ -357,6 +369,7 @@ class ConfigLoader:
         logger.info("サンプラー選択肢を読み込みました")
         return choices
 
+    @trace_io(level=logging.DEBUG)
     def load_lora_choices(self) -> Dict[str, Dict[str, List]]:
         """
         LoRAの選択肢リストを読み込み
@@ -378,6 +391,7 @@ class ConfigLoader:
 
     # ====== 一括読み込み ======
 
+    @trace_io(level=logging.DEBUG)
     def load_all(self) -> Dict[str, Any]:
         """
         すべての設定を一度に読み込み
@@ -408,6 +422,7 @@ class ConfigLoader:
 # ====== 便利な関数 ======
 
 
+@trace_io(level=logging.DEBUG)
 def load_config(config_path: Path) -> ConfigLoader:
     """
     ConfigLoaderのファクトリ関数
@@ -421,6 +436,7 @@ def load_config(config_path: Path) -> ConfigLoader:
     return ConfigLoader(config_path)
 
 
+@trace_io(level=logging.DEBUG)
 def quick_load(config_path: Path) -> Dict[str, Any]:
     """
     設定ファイルを読み込んですべての設定を返す（簡易版）
@@ -438,6 +454,7 @@ def quick_load(config_path: Path) -> Dict[str, Any]:
 # ====== 使用例 ======
 
 
+@trace_io(level=logging.DEBUG)
 def example_usage():
     """使用例"""
 
@@ -474,6 +491,7 @@ def example_usage():
     print(f"実行URL: {config['execution'].comfy_url}")
 
 
+@trace_io(level=logging.DEBUG)
 def example_error_handling():
     """エラーハンドリングの例"""
 

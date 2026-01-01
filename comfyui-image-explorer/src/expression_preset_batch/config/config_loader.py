@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional
 
 import yaml
 
+from dtrace_loging.logging.trace import trace_io
 from expression_preset_batch.models import (
     ExpressionPresetNodeMapping,
     normalize_expressions,
@@ -18,6 +19,7 @@ from expression_preset_batch.models import (
 logger = logging.getLogger(__name__)
 
 
+@trace_io(level=logging.DEBUG)
 def _resolve_path(base_dir: Path, raw: str) -> Path:
     p = Path(raw)
     if p.is_absolute():
@@ -25,6 +27,7 @@ def _resolve_path(base_dir: Path, raw: str) -> Path:
     return (base_dir / p).resolve()
 
 
+@trace_io(level=logging.DEBUG)
 def _require_str(d: Dict[str, Any], key: str, ctx: str) -> str:
     v = d.get(key)
     if not isinstance(v, str) or not v.strip():
@@ -32,16 +35,19 @@ def _require_str(d: Dict[str, Any], key: str, ctx: str) -> str:
     return v.strip()
 
 
+@trace_io(level=logging.DEBUG)
 def _optional_str(d: Dict[str, Any], key: str, default: str) -> str:
     v = d.get(key, default)
     return v.strip() if isinstance(v, str) and v.strip() else default
 
 
+@trace_io(level=logging.DEBUG)
 def _optional_bool(d: Dict[str, Any], key: str, default: bool) -> bool:
     v = d.get(key, default)
     return bool(v) if isinstance(v, bool) else default
 
 
+@trace_io(level=logging.DEBUG)
 def _optional_int(d: Dict[str, Any], key: str, default: int) -> int:
     v = d.get(key, default)
     if v is None:
@@ -51,6 +57,7 @@ def _optional_int(d: Dict[str, Any], key: str, default: int) -> int:
     return v
 
 
+@trace_io(level=logging.DEBUG)
 def _optional_float(d: Dict[str, Any], key: str, default: float) -> float:
     v = d.get(key, default)
     if v is None:
@@ -65,6 +72,7 @@ class EPBWorkflowRef:
     workflow_json: Path
     output_root: Path
 
+    @trace_io(level=logging.DEBUG)
     def __post_init__(self) -> None:
         if not self.workflow_json.exists():
             raise FileNotFoundError(f"workflow_json not found: {self.workflow_json}")
@@ -80,6 +88,7 @@ class EPBRunConfig:
     seed_strategy: str = "time"  # time|increment|fixed
     seed_base: int = 0
 
+    @trace_io(level=logging.DEBUG)
     def __post_init__(self) -> None:
         if self.repeats <= 0:
             raise ValueError("repeats must be > 0")
@@ -128,6 +137,7 @@ class ConfigLoader:
       seed_base: 0
     """
 
+    @trace_io(level=logging.DEBUG)
     def __init__(self, config_path: Path):
         self.config_path = config_path
         self.base_dir = config_path.parent.resolve()
@@ -146,6 +156,7 @@ class ConfigLoader:
 
         self.raw: Dict[str, Any] = raw
 
+    @trace_io(level=logging.DEBUG)
     def load_workflow(self) -> EPBWorkflowRef:
         workflow_json_raw = self.raw.get("workflow_json")
         if not isinstance(workflow_json_raw, str) or not workflow_json_raw.strip():
@@ -162,6 +173,7 @@ class ConfigLoader:
             output_root=_resolve_path(self.base_dir, output_root_raw.strip()),
         )
 
+    @trace_io(level=logging.DEBUG)
     def load_input_image(self) -> Dict[str, Any]:
         sec = self.raw.get("input_image")
         if not isinstance(sec, dict):
@@ -184,6 +196,7 @@ class ConfigLoader:
             "overwrite": overwrite,
         }
 
+    @trace_io(level=logging.DEBUG)
     def load_expression_preset(self) -> Dict[str, Any]:
         sec = self.raw.get("expression_preset")
         if not isinstance(sec, dict):
@@ -209,6 +222,7 @@ class ConfigLoader:
 
         return {"mapping": mapping, "expressions": expressions}
 
+    @trace_io(level=logging.DEBUG)
     def load_save_image(self) -> Dict[str, Any]:
         sec = self.raw.get("save_image", {})
         if sec is None:
@@ -233,6 +247,7 @@ class ConfigLoader:
             "filename_prefix_template": template,
         }
 
+    @trace_io(level=logging.DEBUG)
     def load_seed_node(self) -> Dict[str, Any]:
         sec = self.raw.get("seed_node", {})
         if sec is None:
@@ -252,6 +267,7 @@ class ConfigLoader:
         input_name = _optional_str(sec, "input_name", "seed")
         return {"node_id": node_id.strip(), "input_name": input_name}
 
+    @trace_io(level=logging.DEBUG)
     def load_run(self) -> EPBRunConfig:
         run = self.raw.get("run", {})
         if run is None:
@@ -287,6 +303,7 @@ class ConfigLoader:
             seed_base=seed_base,
         )
 
+    @trace_io(level=logging.DEBUG)
     def load_all(self) -> Dict[str, Any]:
         workflow = self.load_workflow()
         input_image = self.load_input_image()
@@ -307,5 +324,6 @@ class ConfigLoader:
         }
 
 
+@trace_io(level=logging.DEBUG)
 def quick_load(config_path: Path) -> Dict[str, Any]:
     return ConfigLoader(config_path).load_all()

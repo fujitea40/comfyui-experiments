@@ -21,6 +21,7 @@ from comfytools.utils import (
     safe_filename,
     setup_logging,
 )
+from dtrace_loging.logging.trace import trace_io
 from expression_preset_batch.config.config_loader import (
     quick_load,
 )
@@ -37,6 +38,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_EXTS = [".png", ".jpg", ".jpeg", ".webp"]
 
 
+@trace_io(level=logging.DEBUG)
 def iter_image_files(
     images_dir: Path, *, recursive: bool, exts: List[str]
 ) -> Iterable[Path]:
@@ -51,6 +53,7 @@ def iter_image_files(
                 yield p
 
 
+@trace_io(level=logging.DEBUG)
 def compute_seed(strategy: str, base: int, index: int) -> int:
     if strategy == "time":
         return int(generate_seed())
@@ -60,6 +63,7 @@ def compute_seed(strategy: str, base: int, index: int) -> int:
     return int(base) + int(index)
 
 
+@trace_io(level=logging.DEBUG)
 def render_prefix(
     template: str, *, image_stem: str, expr: str, run_id: str, seed: int
 ) -> str:
@@ -72,12 +76,14 @@ def render_prefix(
     )
 
 
+@trace_io(level=logging.DEBUG)
 def write_meta_json(path: Path, meta: dict) -> None:
     ensure_directory(path.parent)
     with path.open("w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2, sort_keys=True)
 
 
+@trace_io(level=logging.DEBUG)
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="ExpressionPresetNode-based batch runner for ComfyUI"
@@ -106,6 +112,7 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
+@trace_io(level=logging.DEBUG)
 def main() -> int:
     args = parse_args()
     # ロギング設定（ルートロガーを設定）
