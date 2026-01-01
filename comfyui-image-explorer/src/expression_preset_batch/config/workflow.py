@@ -10,7 +10,11 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from dtrace_loging.logging.trace import trace_io
-from expression_preset_batch.models import ExpressionPresetNodeMapping, GenerationParams
+from expression_preset_batch.models import (
+    ExpressionPresetNodeMapping,
+    GenerationParams,
+    SamplerParams,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -61,6 +65,14 @@ class EPBWorkflowManager:
     seed_node_id: Optional[str] = None
     seed_input_name: str = "seed"
 
+    # 追加：Sampler node（任意）
+    sampler_node_id: Optional[str] = None
+    steps_input_name: str = "steps"
+    cfg_input_name: str = "cfg"
+    denoise_input_name: str = "denoise"
+    sampler_name_input_name: str = "sampler_name"
+    scheduler_input_name: str = "scheduler"
+
     @trace_io(level=logging.DEBUG)
     def __post_init__(self) -> None:
         self.base_workflow: Workflow = load_workflow_from_file(self.workflow_json)
@@ -89,6 +101,10 @@ class EPBWorkflowManager:
         # 4) filename_prefix（設定がある場合のみ）
         if self.save_image_node_id is not None:
             self.set_filename_prefix(wf, params.filename_prefix)
+
+        # 5) sampler params（設定がある場合のみ）
+        if self.sampler_node_id is not None and params.sampler is not None:
+            self.apply_sampler_params(wf, params.sampler)
 
         return wf
 
@@ -269,3 +285,39 @@ class EPBWorkflowManager:
             )
             return None
         return node
+
+    @trace_io(level=logging.DEBUG)
+    def apply_sampler_params(self, workflow: Workflow, sp: SamplerParams) -> None:
+        if not self.sampler_node_id:
+            return
+
+        node = self.get_node_info(workflow, self.sampler_node_id)
+        if node is None:
+            logger.warning("Sampler node not found. node_id=%s", self.sampler_node_id)
+            return
+
+        inputs = node.get("inputs")
+        if not isinstance(inputs, dict):
+            logger.warning(
+                "Sampler node inputs invalid. node_id=%s", self.sampler_node_id
+            )
+            return
+
+        @trace_io(level=logging.DEBUG)
+        def _set(key: str, value):
+            existing = inputs.get(key)
+            if isinstance(existing, list):
+                logger.warning(
+                    "Skip overwriting sampler param because it is a link(list). node_id=%s input=%s existing=%r",  # noqa: E501
+                    self.sampler_node_id,
+                    key,
+                    existing,
+                )
+                return
+            inputs[key] = value
+
+        _set(self.steps_input_name, int(sp.steps))
+        _set(self.cfg_input_name, float(sp.cfg))
+        _set(self.denoise_input_name, float(sp.denoise))
+        _set(self.sampler_name_input_name, str(sp.sampler_name))
+        _set(self.scheduler_input_name, str(sp.scheduler))
