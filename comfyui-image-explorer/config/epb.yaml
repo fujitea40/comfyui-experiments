@@ -75,7 +75,8 @@ save_image:
 
   # SaveImage.inputs["filename_prefix"] へ入れるテンプレ
   # 使える変数: {image} {expr} {run} {seed}
-  filename_prefix_template: "{image}/{expr}/{run}/img"
+  # filename_prefix_template: "{image}/{expr}/{run}/img"
+  filename_prefix_template: "{image}_s{steps}_c{cfg}_d{denoise}_{sampler}_{scheduler}"
 
 # ----------------------------
 # Seed node override (optional)
