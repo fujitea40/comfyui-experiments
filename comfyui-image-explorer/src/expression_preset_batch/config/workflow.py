@@ -257,8 +257,8 @@ class EPBWorkflowManager:
         with path.open("w", encoding="utf-8") as f:
             json.dump(workflow, f, ensure_ascii=False, indent=2)
 
-    @trace_io(level=logging.DEBUG)
     @staticmethod
+    @trace_io(level=logging.DEBUG)
     def get_node_info(workflow: Workflow, node_id: str) -> Optional[Dict[str, Any]]:
         node = workflow.get(node_id)
         if node is None:
