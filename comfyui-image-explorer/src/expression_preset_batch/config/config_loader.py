@@ -6,7 +6,7 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import yaml
 
@@ -17,6 +17,28 @@ from expression_preset_batch.models import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+@trace_io(level=logging.DEBUG)
+def _optional_str_list(d: Dict[str, Any], key: str, default: List[str]) -> List[str]:
+    v = d.get(key, default)
+    if v is None:
+        return list(default)
+    if not isinstance(v, list) or not all(isinstance(x, str) and x.strip() for x in v):
+        raise ValueError(f"Invalid '{key}' (must be list[str]): {v!r}")
+    return [x.strip() for x in v]
+
+
+@trace_io(level=logging.DEBUG)
+def _optional_num_list(
+    d: Dict[str, Any], key: str, default: List[float]
+) -> List[float]:
+    v = d.get(key, default)
+    if v is None:
+        return list(default)
+    if not isinstance(v, list) or not all(isinstance(x, (int, float)) for x in v):
+        raise ValueError(f"Invalid '{key}' (must be list[number]): {v!r}")
+    return [float(x) for x in v]
 
 
 @trace_io(level=logging.DEBUG)
@@ -304,12 +326,87 @@ class ConfigLoader:
         )
 
     @trace_io(level=logging.DEBUG)
+    def load_sampler_node(self) -> Dict[str, Any]:
+        sec = self.raw.get("sampler_node", {})
+        if sec is None:
+            sec = {}
+        if not isinstance(sec, dict):
+            raise ValueError("sampler_node must be mapping when specified")
+
+        node_id = sec.get("node_id")
+        if node_id is None:
+            # sampler差し替え無効（＝既存挙動）
+            return {"node_id": None}
+
+        if not isinstance(node_id, str) or not node_id.strip():
+            raise ValueError(
+                "sampler_node.node_id must be non-empty string when specified"
+            )
+
+        return {
+            "node_id": node_id.strip(),
+            "steps_input": _optional_str(sec, "steps_input", "steps"),
+            "cfg_input": _optional_str(sec, "cfg_input", "cfg"),
+            "denoise_input": _optional_str(sec, "denoise_input", "denoise"),
+            "sampler_name_input": _optional_str(
+                sec, "sampler_name_input", "sampler_name"
+            ),
+            "scheduler_input": _optional_str(sec, "scheduler_input", "scheduler"),
+        }
+
+    @trace_io(level=logging.DEBUG)
+    def load_sampler_sweep(self) -> Optional[Dict[str, Any]]:
+        sec = self.raw.get("sampler_sweep")
+        if sec is None:
+            return None
+        if not isinstance(sec, dict):
+            raise ValueError("sampler_sweep must be mapping when specified")
+
+        steps = sec.get("steps")
+        cfg = sec.get("cfg")
+        denoise = sec.get("denoise")
+        sampler = sec.get("sampler")
+        scheduler = sec.get("scheduler")
+
+        # “指定されたら必須キーは全部 list で” ルール（取りこぼし事故防止）
+        for k, v in [
+            ("steps", steps),
+            ("cfg", cfg),
+            ("denoise", denoise),
+            ("sampler", sampler),
+            ("scheduler", scheduler),
+        ]:
+            if not isinstance(v, list) or not v:
+                raise ValueError(f"sampler_sweep.{k} must be non-empty list")
+
+        if not all(isinstance(x, int) for x in steps):
+            raise ValueError("sampler_sweep.steps must be list[int]")
+        if not all(isinstance(x, (int, float)) for x in cfg):
+            raise ValueError("sampler_sweep.cfg must be list[number]")
+        if not all(isinstance(x, (int, float)) for x in denoise):
+            raise ValueError("sampler_sweep.denoise must be list[number]")
+        if not all(isinstance(x, str) and x.strip() for x in sampler):
+            raise ValueError("sampler_sweep.sampler must be list[str]")
+        if not all(isinstance(x, str) and x.strip() for x in scheduler):
+            raise ValueError("sampler_sweep.scheduler must be list[str]")
+
+        return {
+            "steps": [int(x) for x in steps],
+            "cfg": [float(x) for x in cfg],
+            "denoise": [float(x) for x in denoise],
+            "sampler": [x.strip() for x in sampler],
+            "scheduler": [x.strip() for x in scheduler],
+        }
+
+    @trace_io(level=logging.DEBUG)
     def load_all(self) -> Dict[str, Any]:
         workflow = self.load_workflow()
         input_image = self.load_input_image()
         ep = self.load_expression_preset()
         save_image = self.load_save_image()
         seed_node = self.load_seed_node()
+        sampler_node = self.load_sampler_node()
+        sampler_sweep = self.load_sampler_sweep()
         run = self.load_run()
 
         return {
@@ -320,6 +417,8 @@ class ConfigLoader:
             "expressions": ep["expressions"],
             "save_image": save_image,
             "seed_node": seed_node,
+            "sampler_node": sampler_node,
+            "sampler_sweep": sampler_sweep,
             "output_root": workflow.output_root,
         }
 

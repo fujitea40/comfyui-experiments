@@ -11,12 +11,24 @@ expression_preset_batch (epb) 用のデータモデル定義。
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TypeAlias
 
+from dtrace_loging.logging.trace import trace_io
+
 # まずは設定ファイルに書く値をそのまま通す（必要になったら Enum/Literal に強化）
 Expression: TypeAlias = str
+
+
+@dataclass(frozen=True)
+class SamplerParams:
+    steps: int
+    cfg: float
+    denoise: float
+    sampler_name: str
+    scheduler: str
 
 
 @dataclass(frozen=True)
@@ -38,6 +50,7 @@ class ExpressionPresetNodeMapping:
     # - params_output_linked: bool = True
     # 例: 下流がリンクで接続されている前提など
 
+    @trace_io(level=logging.DEBUG)
     def validate(self) -> None:
         if not self.node_id:
             raise ValueError("ExpressionPresetNodeMapping.node_id must be non-empty.")
@@ -79,6 +92,9 @@ class GenerationParams:
     # 将来拡張用（expression以外の追加指示を入れたい場合に使う）
     extras: Dict[str, Any] = field(default_factory=dict)
 
+    sampler: Optional[SamplerParams] = None
+
+    @trace_io(level=logging.DEBUG)
     def __post_init__(self) -> None:
         if not isinstance(self.expression, str) or not self.expression.strip():
             raise ValueError("GenerationParams.expression must be a non-empty string.")
@@ -100,6 +116,7 @@ class GenerationParams:
                 "GenerationParams.filename_prefix must be a non-empty string."
             )
 
+    @trace_io(level=logging.DEBUG)
     def to_dict(self) -> Dict[str, Any]:
         return {
             "expression": self.expression,
@@ -112,6 +129,7 @@ class GenerationParams:
 
 
 # 便利: YAML側の expressions を軽く正規化したい場合に使える
+@trace_io(level=logging.DEBUG)
 def normalize_expressions(expressions: List[str]) -> List[Expression]:
     """
     - 前後空白を除去
