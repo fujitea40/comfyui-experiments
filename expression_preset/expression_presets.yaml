@@ -2,69 +2,62 @@ defaults:
   params:
     steps: 25
     cfg: 8.0
-    denoise: 0.48
-
+    denoise: 0.32
+    sampler: dpmpp_2m_sde
+    scheduler: karras
+    clip_skip: 2
+    seed: -1
 expressions:
   neutral:
-    expr_prompt: "neutral expression, calm face, relaxed mouth, eyes open, relaxed eyes, emotionless, natural look, same eye color, consistent eye color"
+    expr_prompt: neutral expression, calm face, relaxed mouth, eyes open, relaxed
+      eyes, emotionless, natural look, same eye color, consistent eye color
     params:
       denoise: 0.28
-
+      cfg: 7.0
+      steps: 15
+      scheduler: karras
+      sampler: dpmpp_2m
   smile:
-    expr_prompt: "gentle smile, soft smile, slightly curved mouth, happy but calm expression, eyes relaxed"
-
+    expr_prompt: gentle smile, soft smile, slightly curved mouth, happy but calm expression,
+      eyes relaxed
+    params:
+      denoise: 0.32
+      cfg: 8.0
+      steps: 25
+      scheduler: karras
+      sampler: dpmpp_2m
   big_smile_closed_eyes:
-    expr_prompt: "big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks"
-
+    expr_prompt: big smile, joyful expression, smiling eyes, wide curved mouth, cheerful,
+      very happy expression, slightly raised cheeks, (eyes closed:1.3), (closed eyes
+      smile:1.4), (shut eyes:1.2), eyelid closed,
+    params:
+      denoise: 0.4
+      cfg: 8.0
+      steps: 25
+      scheduler: normal
+      sampler: dpmpp_2m
   angry:
-    expr_prompt: "angry expression, furrowed eyebrows, sharp eyes, tight mouth"
+    expr_prompt: angry expression, furrowed eyebrows, sharp eyes, tight mouth
     params:
-      cfg: 7.0
-      denoise: 0.30
-
+      denoise: 0.25
+      cfg: 8.0
+      steps: 25
+      scheduler: normal
+      sampler: euler
   sad:
-    expr_prompt: "sad expression, downcast eyes, slightly trembling lips, teary eyes"
-
+    expr_prompt: sad expression, downcast eyes, slightly trembling lips, teary eyes
+    params:
+      denoise: 0.4
+      cfg: 8.0
+      steps: 25
+      scheduler: normal
+      sampler: dpmpp_2m
   surprised:
-    expr_prompt: "surprised expression, wide eyes, slightly open mouth, raised eyebrows"
+    expr_prompt: surprised expression, wide eyes, slightly open mouth, raised eyebrows,
+      (tiny pupils:1.2), (shrunk pupils:1.2), small irises, (large sclera:1.08)
     params:
-      cfg: 7.0
-      denoise: 0.30
-
-  embarrassed:
-    expr_prompt: "embarrassed expression, blushing cheeks, awkward smile, eyes slightly averted"
-
-  laugh:
-    expr_prompt: "laughing, open mouth smile, wide smile, joyful expression, raised cheeks, eyes slightly squinted, bright eyes"
-    params:
-      cfg: 7.0
-      denoise: 0.30
-
-  wink:
-    expr_prompt: "winking, one eye closed, playful smile, slight head tilt, cheeky expression, one eye open ,asymmetric eyes, wink"
-    params:
+      denoise: 0.4
       cfg: 8.0
-      denoise: 0.35
-
-  flustered:
-    expr_prompt: "flustered expression, nervous smile, worried eyebrows, sweat drop, slightly open mouth, tense face"
-    params:
-      cfg: 8.0
-      denoise: 0.40
-
-  smug:
-    expr_prompt: "smug expression, smug smile, smirk, half-lidded eyes, confident look, slightly raised eyebrow"
-    params:
-      denoise: 0.35
-
-  mild_fear:
-    expr_prompt: "slightly scared, uneasy expression, worried eyebrows, tense face, eyes slightly widened, lips pressed, subtle trembling"
-    params:
-      cfg: 7.5
-      denoise: 0.35
-
-  fear:
-    expr_prompt: "terrified expression, fear, wide eyes, small pupils, raised and furrowed eyebrows, trembling, pale face, open mouth, gasping, cold sweat"
-    params:
-      cfg: 7.0
-      denoise: 0.40
+      steps: 25
+      scheduler: euler
+ 
