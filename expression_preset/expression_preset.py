@@ -275,25 +275,25 @@ class ExpressionPresetNode:
     # 先頭4つ（prompt/cfg/denoise/steps）は既存互換のため順序維持
     RETURN_TYPES = (
         "STRING",
-        "FLOAT",
-        "FLOAT",
         "INT",
-        "STRING",
-        "STRING",
-        "STRING",
-        VALID_SCHEDULERS,
+        "FLOAT",
         VALID_SAMPLERS,
+        VALID_SCHEDULERS,
+        "FLOAT",
+        "STRING",
+        "STRING",
+        "STRING",
     )
     RETURN_NAMES = (
         "prompt",
-        "cfg",
-        "denoise",
         "steps",
+        "cfg",
+        "sampler",
+        "scheduler",
+        "denoise",
         "expression",
         "expr_prompt",
         "meta_json",
-        "scheduler",
-        "sampler",
     )
 
     FUNCTION = "run"
@@ -301,7 +301,7 @@ class ExpressionPresetNode:
 
     def run(
         self, common_prompt: str, expression: str
-    ) -> Tuple[str, float, float, int, str, str, str, str, str]:
+    ) -> Tuple[str, int, float, str, str, float, str, str, str]:
         presets = self.__class__._load_presets()
         expressions: Dict[str, Any] = presets.get("expressions") or {}
 
@@ -351,12 +351,12 @@ class ExpressionPresetNode:
 
         return (
             combined,
-            cfg,
-            denoise,
             steps,
+            cfg,
+            sampler,
+            scheduler,
+            denoise,
             expression,
             diff,
             meta_json,
-            scheduler,
-            sampler,
         )
