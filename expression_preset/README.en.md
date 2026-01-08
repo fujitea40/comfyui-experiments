@@ -36,12 +36,16 @@ defaults:
     steps: 25
     cfg: 8.0
     denoise: 0.48
+    scheduler: karras
+    sampler: dpmpp_2m_sde
 
 expressions:
   neutral:
     expr_prompt: "neutral expression, calm face, relaxed mouth, eyes open, relaxed eyes, emotionless, natural look, same eye color, consistent eye color"
     params:
       denoise: 0.28
+      scheduler: karras
+      sampler: dpmpp_2m_sde
 ```
 
 ---
@@ -71,3 +75,6 @@ Pull requests are also welcome.
 
 ### v1.0.0
 - 2025-12-28 Initial release
+
+### v1.0.1
+- 2026-01-08 Added support for reading scheduler and sampler from yaml

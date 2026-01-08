@@ -23,12 +23,16 @@ defaults:
     steps: 25
     cfg: 8.0
     denoise: 0.48
+    scheduler: karras
+    sampler: dpmpp_2m_sde
 
 expressions:
   neutral:
     expr_prompt: "neutral expression, calm face, relaxed mouth, eyes open, relaxed eyes, emotionless, natural look, same eye color, consistent eye color"
     params:
       denoise: 0.28
+      scheduler: karras
+      sampler: dpmpp_2m_sde
 ```
 
 + 設定した**Expression Preset Selector**ノードからの出力は、以下のようにテキストエンコーダーとKsamplerノードに接続します。
@@ -48,3 +52,6 @@ Released under the MIT License.
 
 ### v1.0.0
 - 2025/12/28 初回リリース
+
+### v1.0.1
+- 2026/01/08 scheduler、samplerを読み込めるように更新
