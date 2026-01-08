@@ -1,17 +1,19 @@
 import os
 import json
 from typing import Any, Dict, Tuple
+import yaml  # type: ignore 
 
-
-# -----------------------------------------------------------------------------
-# YAML preset loading (optional)
-# - Place a YAML file next to this .py file (default: expression_presets.yaml)
-# - If PyYAML isn't installed or YAML is missing/invalid, falls back to defaults
-# -----------------------------------------------------------------------------
+# Validation support
 try:
-    import yaml  # type: ignore
-except Exception:
-    yaml = None
+    import comfy.samplers
+    VALID_SCHEDULERS = getattr(comfy.samplers.KSampler, "SCHEDULERS", [])
+    VALID_SAMPLERS = getattr(comfy.samplers.KSampler, "SAMPLERS", [])
+    if not VALID_SAMPLERS:
+        # Fallback for some versions where it might be named differently (though SAMPLERS is standard)
+        VALID_SAMPLERS = getattr(comfy.samplers.KSampler, "SAMPLER_NAMES", [])
+except ImportError:
+    VALID_SCHEDULERS = []
+    VALID_SAMPLERS = []
 
 
 DEFAULT_PRESETS: Dict[str, Any] = {
@@ -20,6 +22,8 @@ DEFAULT_PRESETS: Dict[str, Any] = {
             "steps": 25,
             "cfg": 8.0,
             "denoise": 0.48,
+            "scheduler": "karras",
+            "sampler": "dpmpp_2m_sde",
         }
     },
     "expressions": {
@@ -140,6 +144,7 @@ def _validate_and_compose_presets(presets: Dict[str, Any]) -> Dict[str, Any]:
             raise ValueError(f"expression '{name}'.params must be a mapping (dict)")
 
         # Required params: steps, cfg, denoise
+        # Optional defaults (backwards compat if missing in defaults): scheduler, sampler
         if (
             "steps" not in merged_params
             or "cfg" not in merged_params
@@ -153,12 +158,30 @@ def _validate_and_compose_presets(presets: Dict[str, Any]) -> Dict[str, Any]:
             steps = int(merged_params["steps"])
             cfg = float(merged_params["cfg"])
             denoise = float(merged_params["denoise"])
+            # scheduler/sampler are strings
+            # validate if possible
+            scheduler = str(merged_params.get("scheduler", "karras"))
+            sampler = str(merged_params.get("sampler", "dpmpp_2m_sde"))
+
+            if VALID_SCHEDULERS and scheduler not in VALID_SCHEDULERS:
+                print(f"[ExpressionPresetNode] Warning: Invalid scheduler '{scheduler}' in '{name}'. Fallback to 'karras'.")
+                scheduler = "karras"
+                
+            if VALID_SAMPLERS and sampler not in VALID_SAMPLERS:
+                print(f"[ExpressionPresetNode] Warning: Invalid sampler '{sampler}' in '{name}'. Fallback to 'dpmpp_2m_sde'.")
+                sampler = "dpmpp_2m_sde"
         except Exception as e:
             raise ValueError(f"expression '{name}' has invalid param types: {e}")
 
         composed["expressions"][name] = {
             "expr_prompt": expr_prompt.strip(),
-            "params": {"steps": steps, "cfg": cfg, "denoise": denoise},
+            "params": {
+                "steps": steps,
+                "cfg": cfg,
+                "denoise": denoise,
+                "scheduler": scheduler,
+                "sampler": sampler,
+            },
         }
 
     if not composed["expressions"]:
@@ -184,17 +207,6 @@ class ExpressionPresetNode:
         """Load presets with caching. Falls back to DEFAULT_PRESETS on errors."""
         path = cls._yaml_path()
 
-        # If YAML lib isn't available, just use defaults.
-        if yaml is None:
-            if not cls._CACHE_PRESETS:
-                print(
-                    "[ExpressionPresetNode] PyYAML not found. Using built-in defaults."
-                )
-                cls._CACHE_PRESETS = _validate_and_compose_presets(DEFAULT_PRESETS)
-                cls._CACHE_MTIME = -1.0
-            return cls._CACHE_PRESETS
-
-        # If file doesn't exist, use defaults.
         if not os.path.exists(path):
             if not cls._CACHE_PRESETS:
                 print(
@@ -261,7 +273,17 @@ class ExpressionPresetNode:
 
     # まとめたprompt文字列 + cfg/denoise/steps に加えて、バッチ実行向けのメタ情報も返す
     # 先頭4つ（prompt/cfg/denoise/steps）は既存互換のため順序維持
-    RETURN_TYPES = ("STRING", "FLOAT", "FLOAT", "INT", "STRING", "STRING", "STRING")
+    RETURN_TYPES = (
+        "STRING",
+        "FLOAT",
+        "FLOAT",
+        "INT",
+        "STRING",
+        "STRING",
+        "STRING",
+        VALID_SCHEDULERS,
+        VALID_SAMPLERS,
+    )
     RETURN_NAMES = (
         "prompt",
         "cfg",
@@ -270,6 +292,8 @@ class ExpressionPresetNode:
         "expression",
         "expr_prompt",
         "meta_json",
+        "scheduler",
+        "sampler",
     )
 
     FUNCTION = "run"
@@ -277,7 +301,7 @@ class ExpressionPresetNode:
 
     def run(
         self, common_prompt: str, expression: str
-    ) -> Tuple[str, float, float, int, str, str, str]:
+    ) -> Tuple[str, float, float, int, str, str, str, str, str]:
         presets = self.__class__._load_presets()
         expressions: Dict[str, Any] = presets.get("expressions") or {}
 
@@ -306,6 +330,8 @@ class ExpressionPresetNode:
         cfg = float(params.get("cfg"))
         denoise = float(params.get("denoise"))
         steps = int(params.get("steps"))
+        scheduler = str(params.get("scheduler", "karras"))
+        sampler = str(params.get("sampler", "dpmpp_2m_sde"))
 
         meta = {
             "schema": "expression_preset_v1",
@@ -313,8 +339,24 @@ class ExpressionPresetNode:
             "common_prompt": base,
             "expr_prompt": diff,
             "combined_prompt": combined,
-            "params": {"steps": steps, "cfg": cfg, "denoise": denoise},
+            "params": {
+                "steps": steps,
+                "cfg": cfg,
+                "denoise": denoise,
+                "scheduler": scheduler,
+                "sampler": sampler,
+            },
         }
         meta_json = json.dumps(meta, ensure_ascii=False, sort_keys=True)
 
-        return (combined, cfg, denoise, steps, expression, diff, meta_json)
+        return (
+            combined,
+            cfg,
+            denoise,
+            steps,
+            expression,
+            diff,
+            meta_json,
+            scheduler,
+            sampler,
+        )
