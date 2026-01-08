@@ -36,6 +36,7 @@ expressions:
 ```
 
 + 設定した**Expression Preset Selector**ノードからの出力は、以下のようにテキストエンコーダーとKsamplerノードに接続します。
++ expression, expr_prompt, meta_jsonは設定値を確認するためのデバッグ用です。必要ならPreview as Textで確認できます。
 ![usage](../doc/img/Expression_Preset_Selector_usage.png)
 
 ## ライセンス

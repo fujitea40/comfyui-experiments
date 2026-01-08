@@ -56,6 +56,7 @@ Connect the outputs of **Expression Preset Selector** to your workflow as follow
 
 - Connect the prompt output to your **Text Encoder** node (positive prompt side)
 - Connect the parameter outputs to your **KSampler** node inputs
+- `expression`, `expr_prompt`, and `meta_json` are for debugging purposes to check the configuration values. You can view them using `Preview as Text` if needed.
 
 ![usage](../doc/img/Expression_Preset_Selector_usage.png)
 
