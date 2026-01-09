@@ -252,20 +252,49 @@ class ConfigLoader:
         if not isinstance(sec, dict):
             raise ValueError("save_image must be mapping when specified")
 
-        node_id = sec.get("node_id")
-        if node_id is not None and (
-            not isinstance(node_id, str) or not node_id.strip()
-        ):
-            raise ValueError(
-                "save_image.node_id must be non-empty string when specified"
-            )
-
         template = _optional_str(
             sec, "filename_prefix_template", "{image}/{expr}/{run}/img"
         )
 
+        nodes_raw = sec.get("save_image_nodes")
+        nodes: list[dict[str, str]] = []
+
+        # save_image_nodes は「指定されていれば list」として読む（無指定なら空でOK）
+        if nodes_raw is not None:
+            if not isinstance(nodes_raw, list):
+                raise ValueError(
+                    "save_image.save_image_nodes must be a list when specified"
+                )
+
+            for i, ent in enumerate(nodes_raw):
+                if not isinstance(ent, dict):
+                    raise ValueError(
+                        f"save_image.save_image_nodes[{i}] must be mapping"
+                    )
+
+                node_id = ent.get("node_id")
+                if not isinstance(node_id, str) or not node_id.strip():
+                    raise ValueError(
+                        f"save_image.save_image_nodes[{i}].node_id must be non-empty string"
+                    )
+
+                suffix = ent.get("suffix", "")
+                if suffix is None:
+                    suffix = ""
+                if not isinstance(suffix, str):
+                    raise ValueError(
+                        f"save_image.save_image_nodes[{i}].suffix must be string when specified"
+                    )
+
+                nodes.append(
+                    {
+                        "node_id": node_id.strip(),
+                        "suffix": suffix.strip(),
+                    }
+                )
+
         return {
-            "node_id": node_id.strip() if isinstance(node_id, str) else None,
+            "nodes": nodes,  # ← 単数node_idは廃止。常にnodes。
             "filename_prefix_template": template,
         }
 

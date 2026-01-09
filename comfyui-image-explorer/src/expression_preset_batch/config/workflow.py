@@ -52,7 +52,7 @@ class EPBWorkflowManager:
         4) SaveImage filename_prefix（任意）: inputs["filename_prefix"]
 
     安全策:
-    - 差し替え対象の inputs[...] が list（リンク）なら上書きしない（warnしてスキップ）
+    - 差し替え対象の inputs[...] がset_filename_prefix list（リンク）なら上書きしない（warnしてスキップ）
     """
 
     workflow_json: Path
@@ -61,7 +61,9 @@ class EPBWorkflowManager:
     input_image_node_id: str
     input_image_input_name: str = "image"
 
-    save_image_node_id: Optional[str] = None
+    # save_image_node_id: Optional[str] = None
+    # save_image_node_id: list[dict[str, str]] | None = None
+    save_image_nodes: list[dict[str, str]] | None = None
     seed_node_id: Optional[str] = None
     seed_input_name: str = "seed"
 
@@ -99,7 +101,8 @@ class EPBWorkflowManager:
             self.set_seed(wf, params.seed)
 
         # 4) filename_prefix（設定がある場合のみ）
-        if self.save_image_node_id is not None:
+        # if self.save_image_node_id is not None:
+        if self.save_image_nodes:
             self.set_filename_prefix(wf, params.filename_prefix)
 
         # 5) sampler params（設定がある場合のみ）
@@ -203,34 +206,39 @@ class EPBWorkflowManager:
 
     @trace_io(level=logging.DEBUG)
     def set_filename_prefix(self, workflow: Workflow, prefix: str) -> None:
-        if not self.save_image_node_id:
+        nodes = self.save_image_nodes or []
+        if not nodes:
             return
 
-        node = self.get_node_info(workflow, self.save_image_node_id)
-        if node is None:
-            logger.warning(
-                "SaveImage node not found. node_id=%s", self.save_image_node_id
-            )
-            return
+        for entry in nodes:
+            node_id = entry.get("node_id")
+            if not node_id:
+                continue
 
-        inputs = node.get("inputs")
-        if not isinstance(inputs, dict):
-            logger.warning(
-                "SaveImage node inputs invalid. node_id=%s", self.save_image_node_id
-            )
-            return
+            suffix = entry.get("suffix")
+            final_prefix = f"{prefix}_{suffix}" if suffix else prefix
 
-        existing = inputs.get("filename_prefix")
-        if isinstance(existing, list):
-            logger.warning(
-                "Skip overwriting filename_prefix because it is a link(list). "
-                "node_id=%s existing=%r",
-                self.save_image_node_id,
-                existing,
-            )
-            return
+            node = self.get_node_info(workflow, node_id)
+            if node is None:
+                logger.warning("SaveImage node not found. node_id=%s", node_id)
+                continue
 
-        inputs["filename_prefix"] = prefix
+            inputs = node.get("inputs")
+            if not isinstance(inputs, dict):
+                logger.warning("SaveImage node inputs invalid. node_id=%s", node_id)
+                continue
+
+            existing = inputs.get("filename_prefix")
+            if isinstance(existing, list):
+                logger.warning(
+                    "Skip overwriting filename_prefix because it is a link(list). "
+                    "node_id=%s existing=%r",
+                    node_id,
+                    existing,
+                )
+                continue
+
+            inputs["filename_prefix"] = final_prefix
 
     @trace_io(level=logging.DEBUG)
     def validate(self, workflow: Optional[Workflow] = None) -> bool:
@@ -254,10 +262,13 @@ class EPBWorkflowManager:
 
         # save image (optional)
         if (
-            self.save_image_node_id
-            and self.get_node_info(wf, self.save_image_node_id) is None
+            self.save_image_nodes
+            and self.get_node_info(wf, self.save_image_nodes[0].get("node_id")) is None
         ):
-            logger.error("SaveImage node missing: node_id=%s", self.save_image_node_id)
+            logger.error(
+                "SaveImage node missing: node_id=%s",
+                self.save_image_nodes[0].get("node_id"),
+            )
             ok = False
 
         # seed (optional)
