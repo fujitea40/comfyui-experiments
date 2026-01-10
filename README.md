@@ -18,6 +18,7 @@ ComfyUI用に何か作ったものを入れてます。
 入力したキャラクター画像の顔部分でマスクを生成し、
 表情プリセットカスタムノード（次項参照）しておいた表情毎のパラメータをプロンプトとKsamplerにインプットし、
 表情のみInpaintで生成しなおします。
+本ワークフローと下記プリセットカスタムノードで表情パラメータをチューニングして[生成したデモ](https://fujitea40.github.io/comfyui_expression_demo/)を公開しました。
 
 ![example](doc/img/GenMaskAndInpaint.png)
 

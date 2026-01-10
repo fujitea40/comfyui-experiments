@@ -1,8 +1,8 @@
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "revision": 0,
-  "last_node_id": 62,
-  "last_link_id": 86,
+  "last_node_id": 68,
+  "last_link_id": 107,
   "nodes": [
     {
       "id": 20,
@@ -364,73 +364,11 @@
       ]
     },
     {
-      "id": 47,
-      "type": "PreviewAny",
-      "pos": [
-        409.6961953730747,
-        1063.5948021219358
-      ],
-      "size": [
-        210,
-        166
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "source",
-          "type": "*",
-          "link": 51
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "id": 45,
-      "type": "PreviewAny",
-      "pos": [
-        171.48712537307492,
-        1068.7601721219346
-      ],
-      "size": [
-        210,
-        166
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "source",
-          "type": "*",
-          "link": 49
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
-    {
       "id": 56,
       "type": "SaveImage",
       "pos": [
-        1870.1579644093506,
-        232.17481149872515
+        1646.1508073878663,
+        235.1030025625679
       ],
       "size": [
         270,
@@ -456,8 +394,8 @@
       "id": 55,
       "type": "ImageCompositeMasked",
       "pos": [
-        1565.4678255911244,
-        225.90422741177446
+        1341.4606685696401,
+        228.8324184756172
       ],
       "size": [
         270,
@@ -624,99 +562,6 @@
       ]
     },
     {
-      "id": 46,
-      "type": "PreviewAny",
-      "pos": [
-        646.148345373075,
-        1062.9681421219364
-      ],
-      "size": [
-        210,
-        161.60770000000002
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "source",
-          "type": "*",
-          "link": 50
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "id": 61,
-      "type": "PreviewAny",
-      "pos": [
-        877.5211020186772,
-        1058.7628965270244
-      ],
-      "size": [
-        210,
-        166
-      ],
-      "flags": {},
-      "order": 13,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "source",
-          "type": "*",
-          "link": 75
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "id": 62,
-      "type": "PreviewAny",
-      "pos": [
-        1106.6212118819587,
-        1057.7628660094463
-      ],
-      "size": [
-        210,
-        166
-      ],
-      "flags": {},
-      "order": 14,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "source",
-          "type": "*",
-          "link": 76
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
-    {
       "id": 2,
       "type": "LoadImage",
       "pos": [
@@ -798,7 +643,7 @@
           "widget": {
             "name": "steps"
           },
-          "link": 71
+          "link": 93
         },
         {
           "name": "cfg",
@@ -806,7 +651,7 @@
           "widget": {
             "name": "cfg"
           },
-          "link": 69
+          "link": 94
         },
         {
           "name": "sampler_name",
@@ -814,7 +659,7 @@
           "widget": {
             "name": "sampler_name"
           },
-          "link": 84
+          "link": 98
         },
         {
           "name": "scheduler",
@@ -822,7 +667,7 @@
           "widget": {
             "name": "scheduler"
           },
-          "link": 83
+          "link": 97
         },
         {
           "name": "denoise",
@@ -830,7 +675,7 @@
           "widget": {
             "name": "denoise"
           },
-          "link": 70
+          "link": 96
         }
       ],
       "outputs": [
@@ -846,50 +691,13 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        629736373710425,
+        436299382630115,
         "randomize",
         25,
         8,
         "dpmpp_2m",
         "normal",
         0.35
-      ]
-    },
-    {
-      "id": 34,
-      "type": "CLIPTextEncode",
-      "pos": [
-        501.296164667969,
-        219.13222389648635
-      ],
-      "size": [
-        400,
-        200
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 43
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            39
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "different hairstyle, different face shape,\ndifferent eye color, asymmetrical face,\nstrong lighting change,\n\n"
       ]
     },
     {
@@ -961,61 +769,61 @@
           ]
         },
         {
-          "name": "cfg",
-          "type": "FLOAT",
-          "links": [
-            69
-          ]
-        },
-        {
-          "name": "denoise",
-          "type": "FLOAT",
-          "links": [
-            70
-          ]
-        },
-        {
           "name": "steps",
           "type": "INT",
           "links": [
-            71
+            93
           ]
         },
         {
-          "name": "expression",
-          "type": "STRING",
+          "name": "cfg",
+          "type": "FLOAT",
           "links": [
-            49
-          ]
-        },
-        {
-          "name": "expr_prompt",
-          "type": "STRING",
-          "links": [
-            51
-          ]
-        },
-        {
-          "name": "meta_json",
-          "type": "STRING",
-          "links": [
-            50
-          ]
-        },
-        {
-          "name": "scheduler",
-          "type": "COMBO",
-          "links": [
-            75,
-            83
+            94
           ]
         },
         {
           "name": "sampler",
           "type": "COMBO",
           "links": [
-            76,
-            84
+            98
+          ]
+        },
+        {
+          "name": "scheduler",
+          "type": "COMBO",
+          "links": [
+            49,
+            97
+          ]
+        },
+        {
+          "name": "denoise",
+          "type": "FLOAT",
+          "links": [
+            51,
+            96
+          ]
+        },
+        {
+          "name": "expression",
+          "type": "STRING",
+          "links": [
+            50
+          ]
+        },
+        {
+          "name": "expr_prompt",
+          "type": "STRING",
+          "links": [
+            75
+          ]
+        },
+        {
+          "name": "meta_json",
+          "type": "STRING",
+          "links": [
+            76
           ]
         }
       ],
@@ -1024,7 +832,199 @@
       },
       "widgets_values": [
         "1girl, anime style, clean lineart, consistent proportions, high quality, character illustration,",
-        "smirk_confident"
+        "happy_tears"
+      ]
+    },
+    {
+      "id": 46,
+      "type": "PreviewAny",
+      "pos": [
+        190.14832706252793,
+        1055.968129914905
+      ],
+      "size": [
+        210,
+        161.60770000000002
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 50
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 61,
+      "type": "PreviewAny",
+      "pos": [
+        435.52117526086477,
+        1052.7628476988993
+      ],
+      "size": [
+        210,
+        166
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 75
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 62,
+      "type": "PreviewAny",
+      "pos": [
+        684.6212240889901,
+        1059.7628599059308
+      ],
+      "size": [
+        210,
+        166
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 76
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 45,
+      "type": "PreviewAny",
+      "pos": [
+        913.4870094062784,
+        1054.7602148465442
+      ],
+      "size": [
+        210,
+        166
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 49
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 47,
+      "type": "PreviewAny",
+      "pos": [
+        1149.6961526484656,
+        1048.5947471902957
+      ],
+      "size": [
+        210,
+        166
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 51
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 34,
+      "type": "CLIPTextEncode",
+      "pos": [
+        489.01423571899494,
+        289.48083937439196
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 43
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            39
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "different hairstyle, different face shape,\ndifferent eye color, asymmetrical face,\nstrong lighting change,\n\n"
       ]
     }
   ],
@@ -1270,30 +1270,6 @@
       "CLIP"
     ],
     [
-      69,
-      43,
-      1,
-      31,
-      5,
-      "FLOAT"
-    ],
-    [
-      70,
-      43,
-      2,
-      31,
-      8,
-      "FLOAT"
-    ],
-    [
-      71,
-      43,
-      3,
-      31,
-      4,
-      "INT"
-    ],
-    [
       75,
       43,
       7,
@@ -1310,28 +1286,52 @@
       "*"
     ],
     [
-      83,
-      43,
-      7,
-      31,
-      7,
-      "COMBO"
-    ],
-    [
-      84,
-      43,
-      8,
-      31,
-      6,
-      "COMBO"
-    ],
-    [
       86,
       43,
       0,
       33,
       1,
       "STRING"
+    ],
+    [
+      93,
+      43,
+      1,
+      31,
+      4,
+      "INT"
+    ],
+    [
+      94,
+      43,
+      2,
+      31,
+      5,
+      "FLOAT"
+    ],
+    [
+      96,
+      43,
+      5,
+      31,
+      8,
+      "FLOAT"
+    ],
+    [
+      97,
+      43,
+      4,
+      31,
+      7,
+      "COMBO"
+    ],
+    [
+      98,
+      43,
+      3,
+      31,
+      6,
+      "COMBO"
     ]
   ],
   "groups": [
@@ -1378,8 +1378,8 @@
       "id": 4,
       "title": "Eye Overlay",
       "bounding": [
-        1555.4678255911244,
-        152.30422741177446,
+        1331.4606685696401,
+        155.2324184756172,
         594.6901388182262,
         359.87058408695077
       ],
@@ -1404,10 +1404,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.7513148009015777,
+      "scale": 0.9090909090909091,
       "offset": [
-        1473.312423551701,
-        -146.84509000620733
+        262.0252773946316,
+        -0.3646218531351937
       ]
     },
     "workflowRendererVersion": "LG",

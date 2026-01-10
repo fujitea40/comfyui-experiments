@@ -12,6 +12,27 @@ workflow_json: "D:/git_repos/comfyui-experiments/workflow/GenmaskAndInpaint_API.
 # NOTE: SaveImage の実際の保存先は ComfyUI 側の output 設定に依存します。
 output_root: "C:/ComfyUI/ComfyUI_windows_portable/ComfyUI/output"
 
+# Sampler（KSampler等）の差し替え設定
+sampler_node:
+  node_id: "31"              # KSampler の node id
+  steps_input: "steps"
+  cfg_input: "cfg"
+  denoise_input: "denoise"
+  sampler_name_input: "sampler_name"
+  scheduler_input: "scheduler"
+
+# 全通り探索する候補値
+sampler_sweep:
+  #steps: [15, 20, 25]
+  steps: [25]
+  #cfg: [5.0, 6.0, 7.0]
+  cfg: [7.0]
+  #denoise: [0.25, 0.30, 0.35, 0.40, 0.45]
+  denoise: [0.35]
+  sampler: ["dpmpp_2m_sde"]
+  scheduler: ["karras"]
+
+
 # ----------------------------
 # Input image settings (LoadImage etc.)
 # ----------------------------
@@ -30,22 +51,7 @@ input_image:
   # 同名ファイルが input/ にある場合に上書きするか
   overwrite: false
 
-# Sampler（KSampler等）の差し替え設定
-sampler_node:
-  node_id: "31"              # KSampler の node id
-  steps_input: "steps"
-  cfg_input: "cfg"
-  denoise_input: "denoise"
-  sampler_name_input: "sampler_name"
-  scheduler_input: "scheduler"
 
-# 全通り探索する候補値
-sampler_sweep:
-  steps: [15, 20, 25]
-  cfg: [5.0, 6.0, 7.0]
-  denoise: [0.25, 0.30, 0.35, 0.40, 0.45]
-  sampler: ["dpmpp_2m_sde", "euler_a"]
-  scheduler: ["karras", "normal"]
 
 # ----------------------------
 # ExpressionPresetNode settings
@@ -71,12 +77,18 @@ expression_preset:
 # ----------------------------
 save_image:
   # SaveImage ノードの node_id（prefix差し替えをしたい場合のみ指定）
-  node_id: "36"
+  save_image_nodes:
+    - node_id: "56"
+      suffix: "eye"
+    # 目の上書き前画像のSaveImageノードID（あれば指定）
+    - node_id: "36"
+      suffix: "org"
 
   # SaveImage.inputs["filename_prefix"] へ入れるテンプレ
   # 使える変数: {image} {expr} {run} {seed}
   # filename_prefix_template: "{image}/{expr}/{run}/img"
-  filename_prefix_template: "{image}_s{steps}_c{cfg}_d{denoise}_{sampler}_{scheduler}"
+  #filename_prefix_template: "{image}/{image}_{expr}_{seed}"
+  filename_prefix_template: "{image}_e{expr}_s{steps}_c{cfg}_d{denoise}_{sampler}_{scheduler}"
 
 # ----------------------------
 # Seed node override (optional)

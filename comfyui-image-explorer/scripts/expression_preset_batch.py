@@ -184,7 +184,7 @@ def main() -> int:
         expression_node=expr_mapping,
         input_image_node_id=input_image_cfg["node_id"],
         input_image_input_name=input_image_cfg.get("input_name", "image"),
-        save_image_node_id=save_image_cfg.get("node_id"),
+        save_image_nodes=cfg["save_image"]["nodes"],
         seed_node_id=seed_node_cfg.get("node_id"),
         seed_input_name=seed_node_cfg.get("input_name", "seed") or "seed",
         sampler_node_id=sampler_node_cfg.get("node_id") if sampler_node_cfg else None,
@@ -281,109 +281,108 @@ def main() -> int:
         )
 
         for expr in expressions:
-            for expr in expressions:
-                for steps, cfgv, denoise, sampler_name, scheduler in combos:
-                    sampler_params = None
-                    if steps is not None:
-                        sampler_params = SamplerParams(
-                            steps=int(steps),
-                            cfg=float(cfgv),
-                            denoise=float(denoise),
-                            sampler_name=str(sampler_name),
-                            scheduler=str(scheduler),
+            for steps, cfgv, denoise, sampler_name, scheduler in combos:
+                sampler_params = None
+                if steps is not None:
+                    sampler_params = SamplerParams(
+                        steps=int(steps),
+                        cfg=float(cfgv),
+                        denoise=float(denoise),
+                        sampler_name=str(sampler_name),
+                        scheduler=str(scheduler),
+                    )
+
+                for r in range(run.repeats):
+                    run_id = generate_run_id()
+                    seed = compute_seed(
+                        run.seed_strategy, run.seed_base, seed_counter
+                    )
+                    seed_counter += 1
+
+                    prefix_template = (
+                        save_image_cfg.get("filename_prefix_template")
+                        or "{image}/{expr}/{run}/img"
+                    )
+                    filename_prefix = render_prefix(
+                        prefix_template,
+                        image_stem=image_stem,
+                        expr=expr,
+                        run_id=run_id,
+                        seed=seed,
+                        steps=steps,
+                        cfg=cfgv,
+                        denoise=denoise,
+                        sampler=sampler_name,
+                        scheduler=scheduler,
+                    )
+
+                    params = GenerationParams(
+                        expression=expr,
+                        seed=seed,
+                        filename_prefix=filename_prefix,
+                        sampler=sampler_params,
+                    )
+
+                    meta = {
+                        "tool": "expression_preset_batch",
+                        "input": {
+                            "local_path": str(img_path),
+                            "uploaded_name": uploaded_name,
+                        },
+                        "expression": expr,
+                        "repeat_index": r,
+                        "seed": seed,
+                        "filename_prefix": filename_prefix,
+                        "workflow_json": str(wfref.workflow_json),
+                    }
+
+                    # メタ保存先（ローカル側のログ/再実行用）
+                    meta_dir = (
+                        Path(cfg["output_root"])
+                        / safe_filename(image_stem)
+                        / safe_filename(expr)
+                        / safe_filename(run_id)
+                    )
+                    meta_path = meta_dir / "meta.json"
+
+                    if args.dry_run:
+                        logger.info(
+                            "[dry-run] would run: expr=%s seed=%s prefix=%s",
+                            expr,
+                            seed,
+                            filename_prefix,
+                        )
+                        write_meta_json(meta_path, {**meta, "dry_run": True})
+                        continue
+
+                    # workflow生成（B案: 入力画像/expr/seed/prefix を workflow.py が反映） # noqa: E501
+                    workflow = mgr.create_workflow(
+                        params, input_image_filename=uploaded_name
+                    )
+
+                    # 実行
+                    result = client.execute_and_wait(
+                        workflow=workflow,
+                        poll_interval=run.poll_interval,
+                        max_wait_time=run.timeout_sec,
+                    )
+
+                    meta["success"] = bool(result.success)
+                    if result.success:
+                        meta["history"] = (
+                            result.data
+                        )  # /history のレスポンス（サイズが大きい場合は要注意）
+                        logger.info("done: expr=%s seed=%s", expr, seed)
+                    else:
+                        meta["error"] = result.error_message
+                        logger.error(
+                            "failed: expr=%s seed=%s err=%s",
+                            expr,
+                            seed,
+                            result.error_message,
                         )
 
-                    for r in range(run.repeats):
-                        run_id = generate_run_id()
-                        seed = compute_seed(
-                            run.seed_strategy, run.seed_base, seed_counter
-                        )
-                        seed_counter += 1
-
-                        prefix_template = (
-                            save_image_cfg.get("filename_prefix_template")
-                            or "{image}/{expr}/{run}/img"
-                        )
-                        filename_prefix = render_prefix(
-                            prefix_template,
-                            image_stem=image_stem,
-                            expr=expr,
-                            run_id=run_id,
-                            seed=seed,
-                            steps=steps,
-                            cfg=cfgv,
-                            denoise=denoise,
-                            sampler=sampler_name,
-                            scheduler=scheduler,
-                        )
-
-                        params = GenerationParams(
-                            expression=expr,
-                            seed=seed,
-                            filename_prefix=filename_prefix,
-                            sampler=sampler_params,
-                        )
-
-                        meta = {
-                            "tool": "expression_preset_batch",
-                            "input": {
-                                "local_path": str(img_path),
-                                "uploaded_name": uploaded_name,
-                            },
-                            "expression": expr,
-                            "repeat_index": r,
-                            "seed": seed,
-                            "filename_prefix": filename_prefix,
-                            "workflow_json": str(wfref.workflow_json),
-                        }
-
-                        # メタ保存先（ローカル側のログ/再実行用）
-                        meta_dir = (
-                            Path(cfg["output_root"])
-                            / safe_filename(image_stem)
-                            / safe_filename(expr)
-                            / safe_filename(run_id)
-                        )
-                        meta_path = meta_dir / "meta.json"
-
-                        if args.dry_run:
-                            logger.info(
-                                "[dry-run] would run: expr=%s seed=%s prefix=%s",
-                                expr,
-                                seed,
-                                filename_prefix,
-                            )
-                            write_meta_json(meta_path, {**meta, "dry_run": True})
-                            continue
-
-                        # workflow生成（B案: 入力画像/expr/seed/prefix を workflow.py が反映） # noqa: E501
-                        workflow = mgr.create_workflow(
-                            params, input_image_filename=uploaded_name
-                        )
-
-                        # 実行
-                        result = client.execute_and_wait(
-                            workflow=workflow,
-                            poll_interval=run.poll_interval,
-                            max_wait_time=run.timeout_sec,
-                        )
-
-                        meta["success"] = bool(result.success)
-                        if result.success:
-                            meta["history"] = (
-                                result.data
-                            )  # /history のレスポンス（サイズが大きい場合は要注意）
-                            logger.info("done: expr=%s seed=%s", expr, seed)
-                        else:
-                            meta["error"] = result.error_message
-                            logger.error(
-                                "failed: expr=%s seed=%s err=%s",
-                                expr,
-                                seed,
-                                result.error_message,
-                            )
-
-                write_meta_json(meta_path, meta)
+            write_meta_json(meta_path, meta)
 
     return 0
 

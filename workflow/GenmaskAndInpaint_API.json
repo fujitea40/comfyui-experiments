@@ -1,7 +1,7 @@
 {
   "2": {
     "inputs": {
-      "image": "ComfyUI_00054_.png"
+      "image": "img_00001_ (1).png"
     },
     "class_type": "LoadImage",
     "_meta": {
@@ -48,22 +48,10 @@
       "title": "GroundingDinoSAMSegment (segment anything)"
     }
   },
-  "24": {
-    "inputs": {
-      "mask": [
-        "22",
-        1
-      ]
-    },
-    "class_type": "MaskToImage",
-    "_meta": {
-      "title": "Convert Mask to Image"
-    }
-  },
   "25": {
     "inputs": {
       "images": [
-        "24",
+        "49",
         0
       ]
     },
@@ -95,20 +83,26 @@
   },
   "31": {
     "inputs": {
-      "seed": 862789797102689,
+      "seed": 713350115301561,
       "steps": [
-        "43",
-        3
-      ],
-      "cfg": [
         "43",
         1
       ],
-      "sampler_name": "euler",
-      "scheduler": "karras",
-      "denoise": [
+      "cfg": [
         "43",
         2
+      ],
+      "sampler_name": [
+        "43",
+        3
+      ],
+      "scheduler": [
+        "43",
+        4
+      ],
+      "denoise": [
+        "43",
+        5
       ],
       "model": [
         "32",
@@ -134,7 +128,7 @@
   },
   "32": {
     "inputs": {
-      "ckpt_name": "meinamix_v12Final.safetensors"
+      "ckpt_name": "anythingV3_fp16.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
@@ -159,7 +153,7 @@
   },
   "34": {
     "inputs": {
-      "text": "different hairstyle, different face shape,\ndifferent eye color, asymmetrical face,\nstrong lighting change,\ndeformed face\n",
+      "text": "different hairstyle, different face shape,\ndifferent eye color, asymmetrical face,\nstrong lighting change,\n\n",
       "clip": [
         "32",
         1
@@ -217,8 +211,8 @@
   },
   "43": {
     "inputs": {
-      "common_prompt": "1girl, anime style, clean lineart, consistent proportions, high quality, character illustration",
-      "expression": "big_smile_closed_eyes"
+      "common_prompt": "1girl, anime style, clean lineart, consistent proportions, high quality, character illustration,",
+      "expression": "smile"
     },
     "class_type": "ExpressionPresetNode",
     "_meta": {
@@ -227,8 +221,8 @@
   },
   "45": {
     "inputs": {
-      "preview": "big_smile_closed_eyes",
-      "previewMode": false,
+      "preview": "",
+      "previewMode": null,
       "source": [
         "43",
         4
@@ -241,8 +235,8 @@
   },
   "46": {
     "inputs": {
-      "preview": "{\"combined_prompt\": \"1girl, anime style, clean lineart, consistent proportions, high quality, character illustration, big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks\", \"common_prompt\": \"1girl, anime style, clean lineart, consistent proportions, high quality, character illustration\", \"expr_prompt\": \"big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks\", \"expression\": \"big_smile_closed_eyes\", \"params\": {\"cfg\": 8.0, \"denoise\": 0.48, \"steps\": 25}, \"schema\": \"expression_preset_v1\"}",
-      "previewMode": false,
+      "preview": "",
+      "previewMode": null,
       "source": [
         "43",
         6
@@ -255,11 +249,127 @@
   },
   "47": {
     "inputs": {
-      "preview": "big smile, joyful expression, eyes closed, smiling eyes, wide curved mouth, cheerful, very happy expression, slightly raised cheeks",
-      "previewMode": false,
+      "preview": "",
+      "previewMode": null,
       "source": [
         "43",
         5
+      ]
+    },
+    "class_type": "PreviewAny",
+    "_meta": {
+      "title": "Preview as Text"
+    }
+  },
+  "49": {
+    "inputs": {
+      "prompt": "eye",
+      "threshold": 0.3,
+      "sam_model": [
+        "21",
+        0
+      ],
+      "grounding_dino_model": [
+        "20",
+        0
+      ],
+      "image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "GroundingDinoSAMSegment (segment anything)",
+    "_meta": {
+      "title": "GroundingDinoSAMSegment (segment anything)"
+    }
+  },
+  "55": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "destination": [
+        "35",
+        0
+      ],
+      "source": [
+        "49",
+        0
+      ],
+      "mask": [
+        "59",
+        0
+      ]
+    },
+    "class_type": "ImageCompositeMasked",
+    "_meta": {
+      "title": "ImageCompositeMasked"
+    }
+  },
+  "56": {
+    "inputs": {
+      "filename_prefix": "eyeoverlay",
+      "images": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "59": {
+    "inputs": {
+      "left": 2,
+      "top": 2,
+      "right": 2,
+      "bottom": 0,
+      "mask": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "FeatherMask",
+    "_meta": {
+      "title": "FeatherMask"
+    }
+  },
+  "60": {
+    "inputs": {
+      "expand": -2,
+      "tapered_corners": true,
+      "mask": [
+        "49",
+        1
+      ]
+    },
+    "class_type": "GrowMask",
+    "_meta": {
+      "title": "Grow Mask"
+    }
+  },
+  "61": {
+    "inputs": {
+      "preview": "",
+      "previewMode": null,
+      "source": [
+        "43",
+        7
+      ]
+    },
+    "class_type": "PreviewAny",
+    "_meta": {
+      "title": "Preview as Text"
+    }
+  },
+  "62": {
+    "inputs": {
+      "preview": "",
+      "previewMode": null,
+      "source": [
+        "43",
+        8
       ]
     },
     "class_type": "PreviewAny",
