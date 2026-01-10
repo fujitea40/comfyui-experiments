@@ -22,6 +22,7 @@ This helps avoid the “combinatorial explosion” where running every possible 
 ## [Workflow for Generating Character Expression Variations](./doc/GenMaskAndInpaint.en.md)
 
 This workflow generates a mask around the face area of an input character image, then feeds per-expression presets (see the next section) into both the prompt and KSampler parameters, and regenerates **only the expression** via inpainting.
+Using this workflow and the preset custom node listed below, I tuned the expression parameters and published the generated demo [here](https://fujitea40.github.io/comfyui_expression_demo/).
 
 ![example](doc/img/GenMaskAndInpaint.png)
 
