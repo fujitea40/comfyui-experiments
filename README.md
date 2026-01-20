@@ -13,19 +13,11 @@ ComfyUI用に何か作ったものを入れてます。
 探索軸以外は固定、探索軸とcfgやLoRAは全パターン実行といったリクエストパターンを作成し、APIから実行できます。
 プロンプト全通り実行するとすぐに億や兆といった桁にいってしまうのを防ぎ、数百～千程度の現実的なパターン数を狙うことができます。
 
-## [キャラ表情差分生成用ワークフロー](./doc/GenMaskAndInpaint.md)
+## ~~キャラ表情差分生成用ワークフロー~~
+キャラ表情差分生成用ワークフローは、[comfy_exp_preset](https://github.com/fujitea40/comfy_exp_preset)に移しました
 
-入力したキャラクター画像の顔部分でマスクを生成し、
-表情プリセットカスタムノード（次項参照）しておいた表情毎のパラメータをプロンプトとKsamplerにインプットし、
-表情のみInpaintで生成しなおします。
-本ワークフローと下記プリセットカスタムノードで表情パラメータをチューニングして[生成したデモ](https://fujitea40.github.io/comfyui_expression_demo/)を公開しました。
-
-![example](doc/img/GenMaskAndInpaint.png)
-
-## [表情プリセットカスタムノード](./expression_preset/README.md)
-
-上記のワークフローで簡単に生成する表情を変更できるよう、あらかじめプリセットしておくためのカスタムノードです。
-このカスタムノードで表情名、プロンプト、パラメータを保持しておき、ワークフローからは表情を選択するだけで適切なプロンプトを入力するようにします。
+## ~~表情プリセットカスタムノード~~
+表情プリセットカスタムノードは、[comfy_exp_preset](https://github.com/fujitea40/comfy_exp_preset)に移しました
 
 ## [キャラ表情差分生成一括バッチツール](./comfyui-image-explorer/README.expression_batch_preset.md)
 
