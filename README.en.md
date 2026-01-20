@@ -33,6 +33,17 @@ Using the expression-variation workflow and the ExpressionPresetNode custom node
 
 You can also generate multiple variations per expression by setting the number of repeats, making it easy to pick the best results.
 
+## [Character Sprite Workflow](./doc/CharacterSpriteWorkflow.en.md)
+
+This workflow is designed to generate character sprite variations.
+
+First, you generate a standing, upright reference image in the target outfit using an outfit LoRA. Then, you use IP-Adapter to reference that image to further stabilize and preserve the clothing.
+
+In addition, by using OpenPose with ControlNet to lock the pose, you can generate character sprites with a reasonable level of consistency.
+
+While this approach does not match the quality of high-performance, high-cost models such as Qwen-Image-Edit, the goal is to keep it low-cost and runnable even on lower-end GPUs.
+
+![image](doc/img/StandingImage.png)
 
 ## Credits (Models)
 
