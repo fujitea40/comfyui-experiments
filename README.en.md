@@ -19,18 +19,13 @@ By writing prompt candidates per category in a config file, you can generate req
 
 This helps avoid the “combinatorial explosion” where running every possible prompt combination quickly reaches astronomical numbers, and instead aims for a realistic number of patterns (hundreds to around a thousand).
 
-## [Workflow for Generating Character Expression Variations](./doc/GenMaskAndInpaint.en.md)
+## ~~Workflow for Generating Character Expression Variations~~
 
-This workflow generates a mask around the face area of an input character image, then feeds per-expression presets (see the next section) into both the prompt and KSampler parameters, and regenerates **only the expression** via inpainting.
-Using this workflow and the preset custom node listed below, I tuned the expression parameters and published the generated demo [here](https://fujitea40.github.io/comfyui_expression_demo/).
+Workflow for Generating Character Expression Variations has been moved to [comfy_exp_preset](https://github.com/fujitea40/comfy_exp_preset/blob/main/README.en.md)
 
-![example](doc/img/GenMaskAndInpaint.png)
+## ~~Expression Preset Custom Node~~
 
-## [Expression Preset Custom Node](./expression_preset/README.en.md)
-
-This is a custom node for predefining presets so you can easily switch expressions when using the workflow above.
-
-The node stores the expression name, prompt, and parameters. From the workflow, you only need to select the expression, and the appropriate prompt/parameters will be applied automatically.
+Expression Preset Custom Node has been moved to [comfy_exp_preset](https://github.com/fujitea40/comfy_exp_preset/blob/main/README.en.md)
 
 ## [Character Expression Variation Batch Tool](./comfyui-image-explorer/README.expression_batch_preset.md)
 
